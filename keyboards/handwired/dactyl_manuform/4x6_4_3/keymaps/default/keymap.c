@@ -6,62 +6,133 @@
 
 enum layer_names {
     _BASE,
-    _RAISE,
-    _LOWER,
+    _SYMBOLS,
+    _MOUSE,
     _ARROW
 };
 
 // search str
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    bool useCMD = false;
+    switch (detected_host_os()) {
+      case OS_UNSURE:
+        useCMD = true;
+        break;
+      case OS_MACOS:
+      case OS_IOS:
+        useCMD = true;
+        break;
+      default:
+        break;
+    }
     switch (keycode) {
         case LT(0,KC_X):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_X)); // Intercept hold function to send Ctrl-X
+                tap_code16(useCMD ? G(KC_X) : C(KC_X));
                 return false;
             }
-            return true;             // Return true for normal processing of tap keycode
+            return true;
         case LT(0,KC_C):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_C)); // Intercept hold function to send Ctrl-C
+                tap_code16(useCMD ? G(KC_C) : C(KC_C));
                 return false;
             }
-            return true;             // Return true for normal processing of tap keycode
+            return true;
         case LT(0,KC_V):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_V)); // Intercept hold function to send Ctrl-V
+                tap_code16(useCMD ? G(KC_V) : C(KC_V));
                 return false;
             }
-            return true;             // Return true for normal processing of tap keycode
+            return true;
         case LT(0,KC_R):
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(C(KC_R)); // Intercept hold function to send Ctrl-R
                 return false;
             }
-            return true;             // Return true for normal processing of tap keycode
+            return true;
         case LT(0,KC_Z):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_Z)); // Intercept hold function to send Ctrl-Z
+                tap_code16(useCMD ? G(KC_Z) : C(KC_Z));
                 return false;
             }
-            return true;             // Return true for normal processing of tap keycode
+            return true;
+        case LT(0,KC_LBRC):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_LBRC));
+                return false;
+            }
+            return true;
+        case LT(0,KC_RBRC):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_RBRC));
+                return false;
+            }
+            return true;
+        case LT(0,KC_SLSH):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_SLSH));
+                return false;
+            }
+            return true;
+        case LT(0,KC_QUOT):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_QUOT));
+                return false;
+            }
+            return true;
+        case LT(0,KC_SCLN):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_SCLN));
+                return false;
+            }
+            return true;
+        case LT(0,KC_COMM):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_COMM));
+                return false;
+            }
+            return true;
+        case LT(0,KC_DOT):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_DOT));
+                return false;
+            }
+            return true;
+        case LT(0,KC_BSLS):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_BSLS));
+                return false;
+            }
+            return true;
+        case LT(0,KC_MINS):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_MINS));
+                return false;
+            }
+            return true;
+        case LT(0,KC_EQL):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(S(KC_EQL));
+                return false;
+            }
+            return true;
     }
     return true;
 }
 
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,     /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            KC_BSPC,
-KC_TAB,     KC_Q,           KC_W,           KC_E,               LT(0,KC_R),     KC_T,     /**/       KC_Y,   KC_U,           KC_I,                      KC_O,                       KC_P,            KC_MINS,
-KC_CAPS,    LCTL_T(KC_A),   LSFT_T(KC_S),   LGUI_T(KC_D),       LALT_T(KC_F),   KC_G,     /**/       KC_H,   LALT_T(KC_J),   LGUI_T(KC_K),              LSFT_T(KC_L),               LCTL_T(KC_SCLN), KC_QUOT,
-KC_LSFT,    LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(0,KC_V),     KC_B,     /**/       KC_N,   KC_M,           KC_COMM,                   KC_DOT,                     KC_SLSH,         KC_BSLS,
-KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                      /**/                               MT(LSFT(KC_9), KC_LBRC),   MT(LSFT(KC_0), KC_RBRC),    KC_NO,           KC_NO,
+QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,     /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            LT(0, KC_EQL),
+KC_TAB,     KC_Q,           KC_W,           KC_E,               LT(0,KC_R),     KC_T,     /**/       KC_Y,   KC_U,           KC_I,                      KC_O,                       KC_P,            LT(0, KC_MINS),
+KC_CAPS,    LCTL_T(KC_A),   LSFT_T(KC_S),   LGUI_T(KC_D),       LALT_T(KC_F),   KC_G,     /**/       KC_H,   LALT_T(KC_J),   LGUI_T(KC_K),              LSFT_T(KC_L),               LCTL_T(KC_SCLN), LT(0, KC_QUOT),
+KC_LSFT,    LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(0,KC_V),     KC_B,     /**/       KC_N,   KC_M,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
+KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                      /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
 
-                                                     TT(2),      LT(3,KC_SPC),   KC_BSPC, /**/  KC_DEL,    KC_ENT,     MO(1)
+                                               TT(_MOUSE),  LT(_ARROW,KC_SPC),   KC_BSPC, /**/     KC_DEL,    KC_ENT,     MO(_SYMBOLS)
     ),
 
-    [_LOWER] = LAYOUT(
+    [_SYMBOLS] = LAYOUT(
 KC_TRNS,    KC_F1,          KC_F2,          KC_F3,              KC_F4,          KC_F5,    /**/       KC_F6,   KC_F7,          KC_F8,                    KC_F9,                     KC_F10,          KC_DEL,
 KC_NO,      KC_1,           KC_2,           KC_3,               KC_4,           KC_5,     /**/       KC_6,    KC_7,           KC_8,                     KC_9,                       KC_0,            KC_PLUS,
 KC_TRNS,    KC_EXLM,        KC_AT,          KC_HASH,            KC_DLR,         KC_PERC,  /**/       KC_CIRC, KC_AMPR,        KC_ASTR,                  KC_LPRN,                    KC_RPRN,         KC_PIPE,
@@ -71,11 +142,11 @@ KC_NO,      KC_NO,          KC_TRNS,        KC_TRNS,                            
                                                     KC_TRNS,    KC_TRNS,        KC_TRNS,  /**/  KC_TRNS,  KC_TRNS,   KC_TRNS
     ),
 
-    [_RAISE] = LAYOUT(
+    [_MOUSE] = LAYOUT(
 KC_F12,     KC_F1,          KC_F2,          KC_F3,              KC_F4,          KC_F5,    /**/       KC_F6,   KC_F7,          KC_F8,                     KC_F9,                     KC_F10,          KC_F11,
 KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_WH_U,            KC_TRNS,        KC_TRNS,  /**/       KC_TRNS, KC_TRNS,        KC_MS_U,                   KC_TRNS,                   KC_TRNS,         KC_TRNS,
-KC_TRNS,    KC_ACL0,        KC_ACL1,        KC_WH_L,            KC_WH_D,        KC_WH_R,  /**/       KC_TRNS, KC_TRNS,        KC_MS_L,                   KC_MS_D,                   KC_MS_R,         KC_ACL2,
-KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,            KC_BTN3,        KC_TRNS,  /**/       KC_TRNS, KC_TRNS,        KC_TRNS,                   KC_NO,                     KC_NO,           KC_NO,
+KC_ACL0,    KC_ACL1,        KC_WH_L,        KC_WH_D,            KC_WH_R,        KC_TRNS,  /**/       KC_TRNS, KC_MS_L,        KC_MS_D,                   KC_MS_R,                   KC_ACL2,         KC_TRNS,
+KC_TRNS,    KC_BTN3,        MEH(KC_F1),     MEH(KC_F2),         MEH(KC_F3),     KC_TRNS,  /**/       KC_TRNS, KC_TRNS,        KC_TRNS,                   KC_NO,                     KC_NO,           KC_NO,
 KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,                                      /**/                                KC_TRNS,                   KC_TRNS,                   KC_NO,           KC_NO,
 
                                                     KC_TRNS,    KC_TRNS,        KC_TRNS,  /**/  KC_BTN2,  KC_BTN1,    KC_BTN3
