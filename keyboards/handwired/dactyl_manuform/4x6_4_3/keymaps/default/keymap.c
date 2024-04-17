@@ -3,6 +3,7 @@
 
 #define RAISE MO(_RAISE)
 #define LOWER MO(_LOWER)
+#define PRINT LT(0,MEH(KC_F5))
 
 enum layer_names {
     _BASE,
@@ -122,6 +123,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
+        case PRINT:
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(MEH(KC_F5));
+            } else if (record->event.pressed) {
+                tap_code16(G(S(KC_4)));
+            }
+            return false;
         case DEPLOYTEST:
             if (record->event.pressed) {
                 // when keycode QMKBEST is pressed
@@ -142,8 +150,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
 QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,     /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            LT(0, KC_EQL),
 KC_TAB,     KC_Q,           KC_W,           KC_E,               LT(0,KC_R),     KC_T,     /**/       KC_Y,   KC_U,           KC_I,                      KC_O,                       KC_P,            LT(0, KC_MINS),
-KC_CAPS,    LCTL_T(KC_A),   LSFT_T(KC_S),   LGUI_T(KC_D),       LALT_T(KC_F),   KC_G,     /**/       KC_H,   LALT_T(KC_J),   LGUI_T(KC_K),              LSFT_T(KC_L),               LCTL_T(KC_SCLN), LT(0, KC_QUOT),
-MEH(KC_F5), LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(0,KC_V),     KC_B,     /**/       KC_N,   KC_M,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
+CW_TOGG,    LCTL_T(KC_A),   LSFT_T(KC_S),   LGUI_T(KC_D),       LALT_T(KC_F),   KC_G,     /**/       KC_H,   LALT_T(KC_J),   LGUI_T(KC_K),              LSFT_T(KC_L),               LCTL_T(KC_SCLN), LT(0, KC_QUOT),
+PRINT,      LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(0,KC_V),     KC_B,     /**/       KC_N,   KC_M,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
 KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                      /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
 
                                                TT(_MOUSE),  LT(_ARROW,KC_SPC),   KC_BSPC, /**/     KC_DEL,    KC_ENT,     MO(_SYMBOLS)
