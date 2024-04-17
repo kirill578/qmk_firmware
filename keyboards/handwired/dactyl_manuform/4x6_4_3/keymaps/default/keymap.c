@@ -11,6 +11,11 @@ enum layer_names {
     _ARROW
 };
 
+enum custom_keycodes {
+    DEPLOYTEST = SAFE_RANGE,
+    INVALIATE,
+};
+
 // search str
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -117,6 +122,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
+        case DEPLOYTEST:
+            if (record->event.pressed) {
+                // when keycode QMKBEST is pressed
+                SEND_STRING("yarn build:test && yarn deploy:test\n");
+            }
+            return false;
+        case INVALIATE:
+            if (record->event.pressed) {
+                // when keycode QMKBEST is pressed
+                SEND_STRING("yarn invalidate-cache:test\n");
+            }
+            return false;
     }
     return true;
 }
@@ -126,7 +143,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,     /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            LT(0, KC_EQL),
 KC_TAB,     KC_Q,           KC_W,           KC_E,               LT(0,KC_R),     KC_T,     /**/       KC_Y,   KC_U,           KC_I,                      KC_O,                       KC_P,            LT(0, KC_MINS),
 KC_CAPS,    LCTL_T(KC_A),   LSFT_T(KC_S),   LGUI_T(KC_D),       LALT_T(KC_F),   KC_G,     /**/       KC_H,   LALT_T(KC_J),   LGUI_T(KC_K),              LSFT_T(KC_L),               LCTL_T(KC_SCLN), LT(0, KC_QUOT),
-KC_LSFT,    LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(0,KC_V),     KC_B,     /**/       KC_N,   KC_M,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
+MEH(KC_F5), LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(0,KC_V),     KC_B,     /**/       KC_N,   KC_M,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
 KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                      /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
 
                                                TT(_MOUSE),  LT(_ARROW,KC_SPC),   KC_BSPC, /**/     KC_DEL,    KC_ENT,     MO(_SYMBOLS)
@@ -153,7 +170,7 @@ KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,                            
     ),
 
     [_ARROW] = LAYOUT(
-QK_BOOT,    KC_NO,          KC_NO,          KC_NO,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_NO,          KC_PSLS,                   KC_PAST,                   KC_PMNS,         KC_NO,
+QK_BOOT,    DEPLOYTEST,     INVALIATE,      KC_NO,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_NO,          KC_PSLS,                   KC_PAST,                   KC_PMNS,         KC_NO,
 KC_NO,      KC_NO,          KC_NO,          KC_UP,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_P7,          KC_P8,                     KC_P9,                     KC_PPLS,         KC_NO,
 KC_NO,      KC_HOME,        KC_LEFT,        KC_DOWN,            KC_RGHT,        KC_END,   /**/       KC_NO,  LGUI_T(KC_P4),  LGUI_T(KC_P5),             LSFT_T(KC_P6),             LCTL_T(KC_PCMM), KC_NO,
 KC_NO,      KC_NO,          KC_NO,          KC_NO,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_P0,          KC_P1,                     KC_P2,                     KC_P3,           KC_PEQL,
