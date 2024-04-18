@@ -64,6 +64,36 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             // Let QMK process the KC_BSPC keycode as usual outside of shift
             return true;
         }
+        case LT(_ARROW,KC_SPC):
+            {
+            // Initialize a boolean variable that keeps track
+            // of the delete key status: registered or not?
+            static bool delkey_registered;
+            if (record->event.pressed) {
+                // Detect the activation of either shift keys
+                if (mod_state & MOD_MASK_SHIFT) {
+                    // First temporarily canceling both shifts so that
+                    // shift isn't applied to the KC_DEL keycode
+                    del_mods(MOD_MASK_SHIFT);
+                    register_code(KC_BSPC);
+                    // Update the boolean variable to reflect the status of KC_DEL
+                    delkey_registered = true;
+                    // Reapplying modifier state so that the held shift key(s)
+                    // still work even after having tapped the Backspace/Delete key.
+                    set_mods(mod_state);
+                    return false;
+                }
+            } else { // on release of KC_BSPC
+                // In case KC_DEL is still being sent even after the release of KC_BSPC
+                if (delkey_registered) {
+                    unregister_code(KC_BSPC);
+                    delkey_registered = false;
+                    return false;
+                }
+            }
+            // Let QMK process the KC_BSPC keycode as usual outside of shift
+            return true;
+        }
         case LT(0,KC_X):
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(useCMD ? G(KC_X) : C(KC_X));
@@ -216,7 +246,7 @@ CW_TOGG,    LCTL_T(KC_A),   LSFT_T(KC_S),   LGUI_T(KC_D),       LALT_T(KC_F),   
 PRINT,      LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(0,KC_V),     KC_B,     /**/       KC_N,   KC_M,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
 KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                      /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
 
-                                               KC_ENT,  LT(_ARROW,KC_SPC),    TT(_MOUSE), /**/     KC_BSPC,    MO(_SYMBOLS),     MO(_SYMBOLS)
+                                               KC_ENT,  LT(_ARROW,KC_SPC),    TT(_MOUSE), /**/     MO(_SYMBOLS),    KC_BSPC,     MO(_SYMBOLS)
     ),
 
     [_SYMBOLS] = LAYOUT(
