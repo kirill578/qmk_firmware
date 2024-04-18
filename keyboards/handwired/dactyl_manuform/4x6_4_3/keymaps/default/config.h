@@ -22,3 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //#define EE_HANDS
 #define MK_KINETIC_SPEED
+
+#define MK_C_OFFSET_0 1
+#define MK_C_INTERVAL_0 32
+#define MK_C_OFFSET_1 8
+#define MK_C_INTERVAL_1 16
+#define MK_C_OFFSET_2 12

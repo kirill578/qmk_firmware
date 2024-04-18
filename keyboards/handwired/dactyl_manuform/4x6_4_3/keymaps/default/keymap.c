@@ -170,7 +170,7 @@ KC_NO,      KC_NO,          KC_LCBR,        KC_RCBR,                            
     [_MOUSE] = LAYOUT(
 KC_F12,     KC_F1,          KC_F2,          KC_F3,              KC_F4,          KC_F5,    /**/       KC_F6,   KC_F7,          KC_F8,                     KC_F9,                     KC_F10,          KC_F11,
 KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_WH_U,            KC_TRNS,        KC_TRNS,  /**/       KC_TRNS, KC_TRNS,        KC_MS_U,                   KC_TRNS,                   KC_TRNS,         KC_TRNS,
-KC_ACL0,    KC_ACL1,        KC_WH_L,        KC_WH_D,            KC_WH_R,        KC_TRNS,  /**/       KC_TRNS, KC_MS_L,        KC_MS_D,                   KC_MS_R,                   KC_ACL2,         KC_TRNS,
+KC_TRNS,    KC_ACL1,        KC_WH_L,        KC_WH_D,            KC_WH_R,        KC_TRNS,  /**/       KC_TRNS, KC_MS_L,        KC_MS_D,                   KC_MS_R,                   KC_ACL2,         KC_TRNS,
 KC_TRNS,    KC_BTN3,        MEH(KC_F1),     MEH(KC_F2),         MEH(KC_F3),     KC_TRNS,  /**/       KC_TRNS, KC_TRNS,        KC_TRNS,                   KC_NO,                     KC_NO,           KC_NO,
 KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,                                      /**/                                KC_TRNS,                   KC_TRNS,                   KC_NO,           KC_NO,
 
