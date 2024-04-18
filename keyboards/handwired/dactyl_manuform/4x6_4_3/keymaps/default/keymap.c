@@ -18,7 +18,7 @@ enum custom_keycodes {
 };
 
 // search str
-
+uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     bool useCMD = false;
     switch (detected_host_os()) {
@@ -32,7 +32,38 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       default:
         break;
     }
+    mod_state = get_mods();
     switch (keycode) {
+        case KC_BSPC:
+            {
+            // Initialize a boolean variable that keeps track
+            // of the delete key status: registered or not?
+            static bool delkey_registered;
+            if (record->event.pressed) {
+                // Detect the activation of either shift keys
+                if (mod_state & MOD_MASK_SHIFT) {
+                    // First temporarily canceling both shifts so that
+                    // shift isn't applied to the KC_DEL keycode
+                    del_mods(MOD_MASK_SHIFT);
+                    register_code(KC_DEL);
+                    // Update the boolean variable to reflect the status of KC_DEL
+                    delkey_registered = true;
+                    // Reapplying modifier state so that the held shift key(s)
+                    // still work even after having tapped the Backspace/Delete key.
+                    set_mods(mod_state);
+                    return false;
+                }
+            } else { // on release of KC_BSPC
+                // In case KC_DEL is still being sent even after the release of KC_BSPC
+                if (delkey_registered) {
+                    unregister_code(KC_DEL);
+                    delkey_registered = false;
+                    return false;
+                }
+            }
+            // Let QMK process the KC_BSPC keycode as usual outside of shift
+            return true;
+        }
         case LT(0,KC_X):
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(useCMD ? G(KC_X) : C(KC_X));
@@ -146,6 +177,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
+enum combos {
+    M_COMMA_N,
+    UI_Y,
+    IO_P,
+    ER_T,
+    CV_B,
+    WE_Q,
+    DF_G,
+    JK_H,
+};
+
+const uint16_t PROGMEM m_comma_combo[] = {KC_M, LT(0, KC_COMM), COMBO_END};
+const uint16_t PROGMEM ui_combo[] = {KC_U, KC_I, COMBO_END};
+const uint16_t PROGMEM io_combo[] = {KC_I, KC_O, COMBO_END};
+const uint16_t PROGMEM er_combo[] = {KC_E, LT(0,KC_R), COMBO_END};
+const uint16_t PROGMEM cv_combo[] = {LT(0,KC_C), LT(0,KC_V), COMBO_END};
+const uint16_t PROGMEM we_combo[] = {KC_W, KC_E, COMBO_END};
+const uint16_t PROGMEM df_combo[] = {LGUI_T(KC_D), LALT_T(KC_F), COMBO_END};
+const uint16_t PROGMEM jk_combo[] = {LALT_T(KC_J),   LGUI_T(KC_K), COMBO_END};
+
+combo_t key_combos[] = {
+    [M_COMMA_N] = COMBO(m_comma_combo, KC_N),
+    [UI_Y] = COMBO(ui_combo, KC_Y),
+    [IO_P] = COMBO(io_combo, KC_P),
+    [ER_T] = COMBO(er_combo, KC_T),
+    [CV_B] = COMBO(cv_combo, KC_B),
+    [WE_Q] = COMBO(we_combo, KC_Q),
+    [DF_G] = COMBO(df_combo, KC_G),
+    [JK_H] = COMBO(jk_combo, KC_H),
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
 QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,     /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            LT(0, KC_EQL),
@@ -154,7 +216,7 @@ CW_TOGG,    LCTL_T(KC_A),   LSFT_T(KC_S),   LGUI_T(KC_D),       LALT_T(KC_F),   
 PRINT,      LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(0,KC_V),     KC_B,     /**/       KC_N,   KC_M,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
 KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                      /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
 
-                                               TT(_MOUSE),  LT(_ARROW,KC_SPC),   KC_BSPC, /**/     KC_DEL,    KC_ENT,     MO(_SYMBOLS)
+                                               KC_ENT,  LT(_ARROW,KC_SPC),    TT(_MOUSE), /**/     KC_BSPC,    MO(_SYMBOLS),     MO(_SYMBOLS)
     ),
 
     [_SYMBOLS] = LAYOUT(
@@ -184,6 +246,6 @@ KC_NO,      KC_HOME,        KC_LEFT,        KC_DOWN,            KC_RGHT,        
 KC_NO,      KC_NO,          KC_MS_BTN4,     KC_NO,              KC_MS_BTN5,     KC_NO,    /**/       KC_NO,  KC_P0,          KC_P1,                     KC_P2,                     KC_P3,           KC_PEQL,
 KC_NO,      KC_NO,          KC_NO,          KC_NO,                                        /**/                               KC_PENT,                   KC_PDOT,                   KC_NO,           KC_NO,
 
-                                                    KC_TRNS,    KC_LCTL,        KC_BSPC,  /**/  KC_DEL,    KC_NO,      KC_NO
+                                                    KC_TRNS,    KC_LCTL,        KC_DEL,  /**/        KC_BSPC,    KC_NO,      KC_NO
     )
 };
