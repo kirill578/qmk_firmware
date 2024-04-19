@@ -1,8 +1,6 @@
 
 #include QMK_KEYBOARD_H
 
-#define RAISE MO(_RAISE)
-#define LOWER MO(_LOWER)
 #define PRINT LT(0,MEH(KC_F5))
 
 enum layer_names {
@@ -11,6 +9,36 @@ enum layer_names {
     _MOUSE,
     _ARROW
 };
+
+// mods
+#define      O_GUI    OSM(MOD_LGUI)
+#define      O_SFT    OSM(MOD_LSFT)
+#define      O_CTL    OSM(MOD_LCTL)
+#define      O_ALT    OSM(MOD_LALT)
+#define      O_HPR    OSM(MOD_HYPR)
+#define      O_MEH    OSM(MOD_MEH)
+
+// Left-hand home row mods
+#define HOME_A LCTL_T(KC_A)
+#define HOME_R LALT_T(KC_R)
+#define HOME_S LGUI_T(KC_S)
+#define HOME_T LSFT_T(KC_T)
+#define HOME_G MEH_T(KC_G)
+
+// Right-hand home row mods
+#define HOME_M MEH_T(KC_M)
+#define HOME_N RSFT_T(KC_N)
+#define HOME_E RGUI_T(KC_E)
+#define HOME_I LALT_T(KC_I)
+#define HOME_O RCTL_T(KC_O)
+
+// Hold keys
+#define COM_SCL LT(0, KC_COMM)
+#define DOT_CLN LT(0, KC_DOT)
+#define QUO_DQUO LT(0, KC_QUOT)
+#define MIN_UND LT(0, KC_MINS)
+#define SLS_PIP LT(0, KC_SLSH)
+
 
 enum custom_keycodes {
     DEPLOYTEST = SAFE_RANGE,
@@ -208,45 +236,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 enum combos {
-    M_COMMA_N,
-    UI_Y,
-    IO_P,
-    ER_T,
-    CV_B,
-    WE_Q,
-    DF_G,
-    JK_H,
+    TN_CW_TOGGLE,
 };
-
-const uint16_t PROGMEM m_comma_combo[] = {KC_M, LT(0, KC_COMM), COMBO_END};
-const uint16_t PROGMEM ui_combo[] = {KC_U, KC_I, COMBO_END};
-const uint16_t PROGMEM io_combo[] = {KC_I, KC_O, COMBO_END};
-const uint16_t PROGMEM er_combo[] = {KC_E, LT(0,KC_R), COMBO_END};
-const uint16_t PROGMEM cv_combo[] = {LT(0,KC_C), LT(0,KC_V), COMBO_END};
-const uint16_t PROGMEM we_combo[] = {KC_W, KC_E, COMBO_END};
-const uint16_t PROGMEM df_combo[] = {LGUI_T(KC_D), LALT_T(KC_F), COMBO_END};
-const uint16_t PROGMEM jk_combo[] = {LALT_T(KC_J),   LGUI_T(KC_K), COMBO_END};
-
+const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
 combo_t key_combos[] = {
-    [M_COMMA_N] = COMBO(m_comma_combo, KC_N),
-    [UI_Y] = COMBO(ui_combo, KC_Y),
-    [IO_P] = COMBO(io_combo, KC_P),
-    [ER_T] = COMBO(er_combo, KC_T),
-    [CV_B] = COMBO(cv_combo, KC_B),
-    [WE_Q] = COMBO(we_combo, KC_Q),
-    [DF_G] = COMBO(df_combo, KC_G),
-    [JK_H] = COMBO(jk_combo, KC_H),
+    [TN_CW_TOGGLE] = COMBO(tn_cw_toggle, CW_TOGG),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,     /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            LT(0, KC_EQL),
-KC_TAB,     KC_Q,           KC_W,           KC_E,               LT(0,KC_R),     KC_T,     /**/       KC_Y,   KC_U,           KC_I,                      KC_O,                       KC_P,            LT(0, KC_MINS),
-CW_TOGG,    LCTL_T(KC_A),   LSFT_T(KC_S),   LGUI_T(KC_D),       LALT_T(KC_F),   KC_G,     /**/       KC_H,   LALT_T(KC_J),   LGUI_T(KC_K),              LSFT_T(KC_L),               LCTL_T(KC_SCLN), LT(0, KC_QUOT),
-PRINT,      LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(0,KC_V),     KC_B,     /**/       KC_N,   KC_M,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
-KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                      /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
+QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,      /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            LT(0, KC_EQL),
+KC_TAB,     KC_Q,           KC_W,           KC_F,               KC_P,           KC_B,      /**/       KC_J,   KC_L,           KC_U,                      KC_Y,                       KC_SCLN,         LT(0, KC_MINS),
+KC_BSPC,    HOME_A,         HOME_R,         HOME_S,             HOME_T,         HOME_G,    /**/       HOME_M, HOME_N,         HOME_E,                    HOME_I,                     HOME_O,          LT(0, KC_QUOT),
+PRINT,      LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(_MOUSE,KC_D),LT(0,KC_V),/**/       KC_K,   KC_H,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
+KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                       /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
 
-                                               KC_ENT,  LT(_ARROW,KC_SPC),    TT(_MOUSE), /**/     MO(_SYMBOLS),    KC_BSPC,     MO(_SYMBOLS)
+                                                     KC_NO,  LT(_ARROW,KC_SPC),    KC_NO, /**/     KC_NO,    LT(_SYMBOLS,KC_ENT),     KC_NO
     ),
 
     [_SYMBOLS] = LAYOUT(
