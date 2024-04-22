@@ -28,3 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MK_C_OFFSET_1 8
 #define MK_C_INTERVAL_1 16
 #define MK_C_OFFSET_2 12
+
+// Configure the global tapping term (default: 200ms)
+#define TAPPING_TERM 200
+
+// Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
+#define QUICK_TAP_TERM 0

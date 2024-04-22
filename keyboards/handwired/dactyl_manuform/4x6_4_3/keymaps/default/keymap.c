@@ -2,7 +2,6 @@
 #include QMK_KEYBOARD_H
 
 #define PRINT LT(0,MEH(KC_F5))
-
 enum layer_names {
     _BASE,
     _SYMBOLS,
@@ -43,6 +42,7 @@ enum layer_names {
 enum custom_keycodes {
     DEPLOYTEST = SAFE_RANGE,
     INVALIATE,
+    RTT_MSE
 };
 
 // search str
@@ -121,6 +121,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             // Let QMK process the KC_BSPC keycode as usual outside of shift
             return true;
+        }
+        case RTT_MSE: {
+            uint16_t static x = 1;
+            if (record->event.pressed) {
+                if (x % 3 == 0) {
+                    tap_code16(C(A(S(KC_F1))));
+                } else if (x % 3 == 1) {
+                    tap_code16(C(A(S(KC_F2))));
+                } else if (x % 3 == 2) {
+                    tap_code16(C(A(S(KC_F3))));
+                }
+            }
+            x++;
+            break;
         }
         case LT(0,KC_X):
             if (!record->tap.count && record->event.pressed) {
@@ -248,11 +262,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,      /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            LT(0, KC_EQL),
 KC_TAB,     KC_Q,           KC_W,           KC_F,               KC_P,           KC_B,      /**/       KC_J,   KC_L,           KC_U,                      KC_Y,                       KC_SCLN,         LT(0, KC_MINS),
 KC_BSPC,    HOME_A,         HOME_R,         HOME_S,             HOME_T,         HOME_G,    /**/       HOME_M, HOME_N,         HOME_E,                    HOME_I,                     HOME_O,          LT(0, KC_QUOT),
-PRINT,      LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(_MOUSE,KC_D),LT(0,KC_V),/**/       KC_K,   KC_H,           LT(0, KC_COMM),            LT(0, KC_DOT),              LT(0, KC_SLSH),  LT(0, KC_BSLS),
+PRINT,      LT(0,KC_Z),     LT(0,KC_X),     LT(0,KC_C),         LT(_MOUSE,KC_D),LT(0,KC_V),/**/       KC_K,   KC_H,           KC_COMM,                   KC_DOT,                     KC_SLSH,         LT(0, KC_BSLS),
 KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                       /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
-
-                                                     KC_NO,  LT(_ARROW,KC_SPC),    KC_NO, /**/     KC_NO,    LT(_SYMBOLS,KC_ENT),     KC_NO
+                                                     KC_TAB,  LT(_ARROW,KC_SPC),    KC_NO, /**/     KC_NO,    LT(_SYMBOLS,KC_ENT),     KC_NO
     ),
+
+
+
+//    [_BASE] = LAYOUT(
+//QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,      /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            LT(0, KC_EQL),
+//KC_TAB,     KC_Q,           KC_W,           KC_F,               KC_P,           KC_B,      /**/       KC_J,   KC_L,           KC_U,                      KC_Y,                       KC_SCLN,         LT(0, KC_MINS),
+//KC_BSPC,    KC_A,           KC_R,           KC_S,               KC_T,           KC_G,     /**/        KC_M,   KC_N,           KC_E,                      KC_I,                       KC_O,          LT(0, KC_QUOT),
+//PRINT,      KC_Z,           KC_X,           KC_C,               KC_D,           KC_V,         /**/    KC_K,   KC_H,           KC_COMM,                   KC_DOT,                     KC_SLSH,         LT(0, KC_BSLS),
+//KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                       /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
+//
+//                                                     KC_NO,  LT(_ARROW,KC_SPC),    KC_LSFT, /**/     KC_NO,    LT(_SYMBOLS,KC_ENT),     KC_NO
+//    ),
 
     [_SYMBOLS] = LAYOUT(
 KC_TRNS,    KC_F1,          KC_F2,          KC_F3,              KC_F4,          KC_F5,    /**/       KC_F6,   KC_F7,          KC_F8,                    KC_F9,                     KC_F10,          KC_DEL,
@@ -266,9 +291,9 @@ KC_NO,      KC_NO,          KC_LCBR,        KC_RCBR,                            
 
     [_MOUSE] = LAYOUT(
 KC_F12,     KC_F1,          KC_F2,          KC_F3,              KC_F4,          KC_F5,    /**/       KC_F6,   KC_F7,          KC_F8,                     KC_F9,                     KC_F10,          KC_F11,
-KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_WH_U,            KC_TRNS,        KC_TRNS,  /**/       KC_TRNS, KC_TRNS,        KC_MS_U,                   KC_TRNS,                   KC_TRNS,         KC_TRNS,
-KC_TRNS,    KC_ACL1,        KC_WH_L,        KC_WH_D,            KC_WH_R,        KC_TRNS,  /**/       KC_TRNS, KC_MS_L,        KC_MS_D,                   KC_MS_R,                   KC_ACL2,         KC_TRNS,
-KC_TRNS,    KC_BTN3,        MEH(KC_F1),     MEH(KC_F2),         MEH(KC_F3),     KC_TRNS,  /**/       KC_TRNS, KC_TRNS,        KC_TRNS,                   KC_NO,                     KC_NO,           KC_NO,
+KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_WH_U,            KC_TRNS,        KC_TRNS,  /**/       KC_MS_L, KC_WH_D,        KC_MS_U,                   KC_WH_U,                   KC_WH_R,         KC_TRNS,
+KC_TRNS,    KC_ACL1,        KC_WH_L,        KC_WH_D,            KC_WH_R,        KC_TRNS,  /**/       KC_TRNS, K66   C_MS_L,        KC_MS_D,                   KC_MS_R,                   KC_ACL2,         KC_TRNS,
+KC_TRNS,    KC_BTN3,        MEH(KC_F1),     MEH(KC_F2),         MEH(KC_F3),     KC_TRNS,  /**/       KC_TRNS, RTT_MSE,        KC_TRNS,                   KC_NO,                     KC_NO,           KC_NO,
 KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,                                      /**/                                KC_TRNS,                   KC_TRNS,                   KC_NO,           KC_NO,
 
                                                     KC_TRNS,    KC_TRNS,        KC_TRNS,  /**/  KC_BTN2,  KC_BTN1,    KC_BTN3
