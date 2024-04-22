@@ -292,8 +292,8 @@ KC_NO,      KC_NO,          KC_LCBR,        KC_RCBR,                            
     [_MOUSE] = LAYOUT(
 KC_F12,     KC_F1,          KC_F2,          KC_F3,              KC_F4,          KC_F5,    /**/       KC_F6,   KC_F7,          KC_F8,                     KC_F9,                     KC_F10,          KC_F11,
 KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_WH_U,            KC_TRNS,        KC_TRNS,  /**/       KC_MS_L, KC_WH_D,        KC_MS_U,                   KC_WH_U,                   KC_WH_R,         KC_TRNS,
-KC_TRNS,    KC_ACL1,        KC_WH_L,        KC_WH_D,            KC_WH_R,        KC_TRNS,  /**/       KC_TRNS, K66   C_MS_L,        KC_MS_D,                   KC_MS_R,                   KC_ACL2,         KC_TRNS,
-KC_TRNS,    KC_BTN3,        MEH(KC_F1),     MEH(KC_F2),         MEH(KC_F3),     KC_TRNS,  /**/       KC_TRNS, RTT_MSE,        KC_TRNS,                   KC_NO,                     KC_NO,           KC_NO,
+KC_TRNS,    KC_ACL1,        KC_WH_L,        KC_WH_D,            KC_WH_R,        KC_TRNS,  /**/       KC_TRNS, KC_MS_L,        KC_MS_D,                   KC_MS_R,                   KC_ACL2,         KC_TRNS,
+KC_TRNS,    KC_BTN3,        KC_ACL2,        KC_ACL0,            KC_TRNS,        KC_TRNS,  /**/       KC_TRNS, RTT_MSE,        KC_MS_BTN4,                KC_MS_BTN5,                KC_NO,           KC_NO,
 KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,                                      /**/                                KC_TRNS,                   KC_TRNS,                   KC_NO,           KC_NO,
 
                                                     KC_TRNS,    KC_TRNS,        KC_TRNS,  /**/  KC_BTN2,  KC_BTN1,    KC_BTN3
@@ -302,8 +302,8 @@ KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,                            
     [_ARROW] = LAYOUT(
 QK_BOOT,    DEPLOYTEST,     INVALIATE,      KC_NO,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_NO,          KC_PSLS,                   KC_PAST,                   KC_PMNS,         KC_NO,
 KC_NO,      KC_NO,          KC_NO,          KC_UP,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_P7,          KC_P8,                     KC_P9,                     KC_PPLS,         KC_NO,
-KC_NO,      KC_HOME,        KC_LEFT,        KC_DOWN,            KC_RGHT,        KC_END,   /**/       KC_NO,  LGUI_T(KC_P4),  LGUI_T(KC_P5),             LSFT_T(KC_P6),             LCTL_T(KC_PCMM), KC_NO,
-KC_NO,      KC_NO,          KC_MS_BTN4,     KC_NO,              KC_MS_BTN5,     KC_NO,    /**/       KC_NO,  KC_P0,          KC_P1,                     KC_P2,                     KC_P3,           KC_PEQL,
+KC_NO,      KC_HOME,        KC_LEFT,        KC_DOWN,            KC_RGHT,        KC_END,   /**/       KC_NO,  RSFT_T(KC_P4),  RGUI_T(KC_P5),             LALT_T(KC_P6),             RCTL_T(KC_PCMM), KC_NO,
+KC_NO,      KC_NO,          KC_MS_BTN4,     KC_NO,              KC_MS_BTN5,     KC_NO,    /**/       KC_P0,  KC_P1,          KC_P2,                     KC_P3,           KC_PEQL,KC_NO,
 KC_NO,      KC_NO,          KC_NO,          KC_NO,                                        /**/                               KC_PENT,                   KC_PDOT,                   KC_NO,           KC_NO,
 
                                                     KC_TRNS,    KC_LCTL,        KC_DEL,  /**/        KC_BSPC,    KC_NO,      KC_NO

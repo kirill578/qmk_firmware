@@ -21,13 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define MASTER_RIGHT
 
 //#define EE_HANDS
-#define MK_KINETIC_SPEED
+// #define MK_KINETIC_SPEED
 
 #define MK_C_OFFSET_0 1
-#define MK_C_INTERVAL_0 32
-#define MK_C_OFFSET_1 8
-#define MK_C_INTERVAL_1 16
-#define MK_C_OFFSET_2 12
+#define MK_C_INTERVAL_0 512
+#define MOUSEKEY_MOVE_DELTA 2
+#define MK_C_OFFSET_1 256
+#define MK_C_INTERVAL_1 4
+#define MK_C_OFFSET_2 1024
 
 // Configure the global tapping term (default: 200ms)
 #define TAPPING_TERM 200
