@@ -22,16 +22,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //#define EE_HANDS
 // #define MK_KINETIC_SPEED
-
-#define MK_C_OFFSET_0 1
-#define MK_C_INTERVAL_0 512
-#define MOUSEKEY_MOVE_DELTA 2
-#define MK_C_OFFSET_1 256
-#define MK_C_INTERVAL_1 4
-#define MK_C_OFFSET_2 1024
+// #define MK_COMBINED
 
 // Configure the global tapping term (default: 200ms)
 #define TAPPING_TERM 320
 
 // Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
 #define QUICK_TAP_TERM 0
+#define MK_MOMENTARY_ACCEL
+
+#define MOUSEKEY_INITIAL_SPEED	200
+#define MOUSEKEY_BASE_SPEED		200
+#define MK_3_SPEED 300
+
+#define MK_C_OFFSET_UNMOD	16
+#define MK_C_INTERVAL_UNMOD	12
+#define MK_C_OFFSET_0	2
+#define MK_C_INTERVAL_0	8
