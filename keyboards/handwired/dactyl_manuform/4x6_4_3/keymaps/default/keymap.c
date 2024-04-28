@@ -4,6 +4,7 @@
 #define PRINT LT(0,MEH(KC_F5))
 enum layer_names {
     _BASE,
+    _BASE2,
     _SYMBOLS,
     _MOUSE,
     _ARROW
@@ -288,6 +289,16 @@ KC_NO,      KC_NO,          KC_MS_BTN4,     KC_MS_BTN5,                         
                                                     KC_TAB,  LT(_ARROW,KC_SPC),    KC_TAB, /**/     KC_BSPC,    LT(_SYMBOLS,KC_ENT),     KC_NO
     ),
 
+    [_BASE2] = LAYOUT(
+QK_GESC,    KC_1,           KC_2,           KC_3,               KC_4,           KC_5,      /**/       KC_6,   KC_7,           KC_8,                      KC_9,                       KC_0,            LT(0, KC_EQL),
+KC_TAB,     KC_Q,           KC_W,           KC_F,               KC_P,           KC_B,      /**/       KC_J,   KC_L,           KC_U,                      KC_Y,                       KC_SCLN,         LT(0, KC_MINS),
+KC_NO,      KC_A,           KC_R,           KC_S,               KC_T,           KC_G,     /**/        KC_M,   KC_N,           KC_E,                      KC_I,                       KC_O,          LT(0, KC_QUOT),
+PRINT,      KC_Z,           KC_X,           KC_C,               KC_D,           KC_V,         /**/    KC_K,   KC_H,           KC_COMM,                   KC_DOT,                     KC_SLSH,         LT(0, KC_BSLS),
+KC_NO,      KC_NO,          KC_LPRN,        KC_RPRN,                                       /**/                               LT(0, KC_LBRC),            LT(0, KC_RBRC),             KC_NO,           KC_NO,
+
+                                                     KC_NO,  LT(_ARROW,KC_SPC),    KC_LSFT, /**/     KC_NO,    LT(_SYMBOLS,KC_ENT),     KC_NO
+    ),
+
     [_SYMBOLS] = LAYOUT(
 KC_TRNS,    KC_F1,          KC_F2,          KC_F3,              KC_F4,          KC_F5,    /**/       KC_F6,   KC_F7,          KC_F8,                    KC_F9,                      KC_F10,          KC_DEL,
 KC_TRNS,    KC_1,           KC_UNDS,        KC_LBRC,            KC_RBRC,        KC_CIRC,     /**/    KC_6,    S(KC_COMM),        S(KC_DOT),                  KC_9,                       KC_0,            KC_PLUS,
@@ -309,9 +320,9 @@ KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,                            
     ),
 
     [_ARROW] = LAYOUT(
-QK_BOOT,    DEPLOYTEST,     INVALIATE,      KC_NO,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_NO,          KC_PSLS,                   KC_PAST,                   KC_PMNS,         KC_NO,
-KC_TRNS,      KC_NO,          KC_NO,          KC_UP,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_P7,          KC_P8,                     KC_P9,                     KC_PPLS,         KC_NO,
-KC_TRNS,      KC_HOME,        KC_LEFT,        KC_DOWN,            KC_RGHT,        KC_END,   /**/       KC_NO,  RSFT_T(KC_P4),  RGUI_T(KC_P5),             LALT_T(KC_P6),             RCTL_T(KC_PCMM), KC_NO,
+QK_BOOT,      DEPLOYTEST,     INVALIATE,      KC_NO,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_NO,          KC_PSLS,                   KC_PAST,                   KC_PMNS,         KC_NO,
+DF(_BASE),    KC_NO,          KC_NO,          KC_UP,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_P7,          KC_P8,                     KC_P9,                     KC_PPLS,         KC_NO,
+DF(_BASE2),   KC_HOME,        KC_LEFT,        KC_DOWN,            KC_RGHT,        KC_END,   /**/       KC_NO,  RSFT_T(KC_P4),  RGUI_T(KC_P5),             LALT_T(KC_P6),             RCTL_T(KC_PCMM), KC_NO,
 KC_TRNS,      KC_NO,          KC_MS_BTN4,     KC_NO,              KC_MS_BTN5,     KC_NO,    /**/       KC_P0,  KC_P1,          KC_P2,                     KC_P3,           KC_PEQL,KC_NO,
 KC_TRNS,      KC_NO,          KC_NO,          KC_NO,                                        /**/                               KC_PENT,                   KC_PDOT,                   KC_NO,           KC_NO,
 
