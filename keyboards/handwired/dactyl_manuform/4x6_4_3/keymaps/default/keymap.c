@@ -246,6 +246,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING("yarn invalidate-cache:test\n");
             }
             return false;
+        case KC_P0:
+        case KC_P1:
+        case KC_P2:
+        case KC_P3:
+        case RSFT_T(KC_P4):
+        case RGUI_T(KC_P5):
+        case LALT_T(KC_P6):
+        case KC_P7:
+        case KC_P8:
+        case KC_P9:
+            if (!host_keyboard_led_state().num_lock) {
+                tap_code(KC_NUM_LOCK);
+            }
+            return true;
     }
     return true;
 }
