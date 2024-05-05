@@ -323,9 +323,11 @@ KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,                            
 QK_BOOT,      DEPLOYTEST,     INVALIATE,      KC_NO,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_NO,          KC_PSLS,                   KC_PAST,                   KC_PMNS,         KC_NO,
 DF(_BASE),    KC_NO,          KC_NO,          KC_UP,              KC_NO,          KC_NO,    /**/       KC_NO,  KC_P7,          KC_P8,                     KC_P9,                     KC_PPLS,         KC_NO,
 DF(_BASE2),   KC_HOME,        KC_LEFT,        KC_DOWN,            KC_RGHT,        KC_END,   /**/       KC_NO,  RSFT_T(KC_P4),  RGUI_T(KC_P5),             LALT_T(KC_P6),             RCTL_T(KC_PCMM), KC_NO,
-KC_TRNS,      KC_NO,          KC_MS_BTN4,     KC_NO,              KC_MS_BTN5,     KC_NO,    /**/       KC_P0,  KC_P1,          KC_P2,                     KC_P3,           KC_PEQL,KC_NO,
+KC_TRNS,      KC_NO,          KC_MS_BTN4,     KC_NO,              KC_MS_BTN5,     KC_NO,    /**/       KC_P0,  KC_P1,          KC_P2,                     KC_P3,                     KC_PEQL,         KC_NO,
 KC_TRNS,      KC_NO,          KC_NO,          KC_NO,                                        /**/                               KC_PENT,                   KC_PDOT,                   KC_NO,           KC_NO,
 
                                                     KC_TRNS,    KC_LCTL,        KC_DEL,  /**/        KC_BSPC,    KC_NO,      KC_NO
     )
 };
+
+
