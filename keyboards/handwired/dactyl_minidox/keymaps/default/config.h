@@ -13,6 +13,16 @@
 #define BOOTMAGIC_ROW_RIGHT 4
 #define BOOTMAGIC_COLUMN_RIGHT 4
 
+#define AUDIO_PIN C6
+
+// #define NO_MUSIC_MODE
+//#undef LOCKING_SUPPORT_ENABLE
+//#undef LOCKING_RESYNC_ENABLE
+
+#ifdef AUDIO_ENABLE
+#    define STARTUP_SONG SONG(STARTUP_SOUND)
+#endif
+
 /* synchronous, odd parity, 1-bit stop, 8-bit data, sample at falling edge */
 /* set DDR of CLOCK as input to be slave */
 #define PS2_USART_INIT() do {   \
