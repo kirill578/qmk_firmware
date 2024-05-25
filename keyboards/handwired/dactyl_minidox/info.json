@@ -6,40 +6,28 @@
     "usb": {
         "vid": "0x444D",
         "pid": "0x3536",
-        "device_version": "0.0.3"
+        "device_version": "0.0.1"
     },
     "features": {
         "bootmagic": true,
-        "console": false,
         "command": false,
+        "console": false,
         "extrakey": true,
         "mousekey": true,
-        "nkro": true
-    },
-    "ws2812": {
-        "pin": "D3"
-    },
-    "rgb_matrix": {
-        "center_point": [133, 54],
-        "driver": "ws2812",
-        "split_count": [18, 18]
+        "nkro": false
     },
     "matrix_pins": {
         "cols": ["C6", "D7", "E6", "B4", "B5"],
         "rows": ["B1", "B3", "B2", "B6"]
     },
-    "diode_direction": "ROW2COL",
+    "diode_direction": "COL2ROW",
     "split": {
         "enabled": true,
-        "soft_serial_pin": "D0"
+        "soft_serial_pin": "D3"
     },
     "development_board": "promicro",
-    "layout_aliases": {
-        "LAYOUT": "LAYOUT_split_3x5_3"
-    },
-    "community_layouts": ["split_3x5_3"],
     "layouts": {
-        "LAYOUT_split_3x5_3": {
+        "LAYOUT": {
             "layout": [
                 {"matrix": [0, 0], "x": 0, "y": 0},
                 {"matrix": [0, 1], "x": 1, "y": 0},
