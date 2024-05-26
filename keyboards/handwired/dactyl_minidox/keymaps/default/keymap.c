@@ -271,7 +271,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_P7:
         case KC_P8:
         case KC_P9:
-            if (!host_keyboard_led_state().num_lock) {
+            if (!host_keyboard_led_state().num_lock && !useCMD) {
                 tap_code(KC_NUM_LOCK);
             }
             return true;
