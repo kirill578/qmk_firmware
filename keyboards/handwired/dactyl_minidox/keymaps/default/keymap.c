@@ -9,9 +9,9 @@ enum layer_names {
     _ARROW
 };
 
-float cutSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_A3), Q__NOTE(_B3),);
+float cutSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_C3), Q__NOTE(_C1),);
 float copySound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_B3),);
-float pasteSound[][2] = SONG(Q__NOTE(_B3), Q__NOTE(_A3),);
+float pasteSound[][2] = SONG(Q__NOTE(_B3),);
 float undoSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_A3),);
 
 
@@ -287,7 +287,10 @@ enum combos {
     _46_DEL,
     FP_OC,
     LU_CC,
-    COMMA_DOT_MINUS
+    COMMA_DOT_MINUS,
+    QW_ESC,
+    CD_LBRC,
+    HCOMMA_RBRC
 };
 
 const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
@@ -298,6 +301,9 @@ const uint16_t PROGMEM _46_del[] = {RSFT_T(KC_P4), LALT_T(KC_P6), COMBO_END};
 const uint16_t PROGMEM fp_oc[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM lu_cc[] = {KC_L, KC_U, COMBO_END};
 const uint16_t PROGMEM comma_dot_minus[] = {KC_COMM, KC_DOT, COMBO_END};
+const uint16_t PROGMEM qw_esc[] = {KC_Q, KC_W, COMBO_END};
+const uint16_t PROGMEM cd_lbrc[] = {LT(0,KC_C), LT(_MOUSE,KC_D), COMBO_END};
+const uint16_t PROGMEM hcomma_rbrc[] = {KC_H, KC_COMM, COMBO_END};
 
 
 combo_t key_combos[] = {
@@ -308,10 +314,11 @@ combo_t key_combos[] = {
     [_46_DEL] = COMBO(_46_del, KC_DEL),
     [FP_OC] = COMBO(fp_oc, KC_LCBR),
     [LU_CC] = COMBO(lu_cc, KC_RCBR),
-    [COMMA_DOT_MINUS] = COMBO(comma_dot_minus, KC_MINS)
+    [COMMA_DOT_MINUS] = COMBO(comma_dot_minus, KC_MINS),
+    [QW_ESC] = COMBO(qw_esc, KC_ESC),
+    [CD_LBRC] = COMBO(cd_lbrc, KC_LBRC),
+    [HCOMMA_RBRC] = COMBO(hcomma_rbrc, KC_RBRC)
 };
-
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
         KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,  LT(0,KC_QUOT),
@@ -344,3 +351,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                    KC_LEFT, KC_RIGHT,     KC_TAB,  KC_SPC,                               KC_BSPC, KC_PENT, KC_LPRN, KC_PDOT
     )
 };
+
+
+
