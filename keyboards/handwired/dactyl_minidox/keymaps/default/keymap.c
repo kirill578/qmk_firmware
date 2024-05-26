@@ -6,7 +6,7 @@ enum layer_names {
     _BASE2,
     _SYMBOLS,
     _MOUSE,
-    _ARROW_ARROW
+    _ARROW
 };
 
 float major[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_B3),);
@@ -278,7 +278,8 @@ enum combos {
     NI_DEL,
     _46_DEL,
     FP_OC,
-    LU_CC
+    LU_CC,
+    COMMA_DOT_MINUS
 };
 
 const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
@@ -288,6 +289,7 @@ const uint16_t PROGMEM ni_del[] = {HOME_N, HOME_I, COMBO_END};
 const uint16_t PROGMEM _46_del[] = {RSFT_T(KC_P4), LALT_T(KC_P6), COMBO_END};
 const uint16_t PROGMEM fp_oc[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM lu_cc[] = {KC_L, KC_U, COMBO_END};
+const uint16_t PROGMEM comma_dot_minus[] = {KC_COMM, KC_DOT, COMBO_END};
 
 
 combo_t key_combos[] = {
@@ -297,7 +299,8 @@ combo_t key_combos[] = {
     [NI_DEL] = COMBO(ni_del, KC_DEL),
     [_46_DEL] = COMBO(_46_del, KC_DEL),
     [FP_OC] = COMBO(fp_oc, KC_LCBR),
-    [LU_CC] = COMBO(lu_cc, KC_RCBR)
+    [LU_CC] = COMBO(lu_cc, KC_RCBR),
+    [COMMA_DOT_MINUS] = COMBO(comma_dot_minus, KC_MINS)
 };
 
 
