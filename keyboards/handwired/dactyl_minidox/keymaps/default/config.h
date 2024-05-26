@@ -1,10 +1,31 @@
 #pragma once
 #define SPLIT_USB_DETECT
 
+// has to be disabled because of link time optimization
+#define NO_ACTION_MACRO
+#define NO_ACTION_FUNCTION
+
 #define SELECT_SOFT_SERIAL_SPEED 1
 
 #define SPLIT_HAND_PIN F4
 #define	SPLIT_HAND_PIN_LOW_IS_LEFT
+
+
+// Configure the global tapping term (default: 200ms)
+#define TAPPING_TERM 320
+
+// Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
+#define QUICK_TAP_TERM 0
+#define MK_MOMENTARY_ACCEL
+
+#define MOUSEKEY_INITIAL_SPEED	200
+#define MOUSEKEY_BASE_SPEED		200
+#define MK_3_SPEED 300
+
+#define MK_C_OFFSET_UNMOD	16
+#define MK_C_INTERVAL_UNMOD	12
+#define MK_C_OFFSET_0	2
+#define MK_C_INTERVAL_0	8
 
 
 #define PS2_CLOCK_PIN   D5
