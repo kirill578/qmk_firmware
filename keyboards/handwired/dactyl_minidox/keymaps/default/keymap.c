@@ -146,7 +146,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case LT(0,KC_C):
             if (!record->tap.count && record->event.pressed) {
                 #ifdef AUDIO_ENABLE
-
                     PLAY_SONG(minor);
                 #endif //AUDIO_ENABLE
                 tap_code16(useCMD ? G(KC_C) : C(KC_C));
@@ -154,10 +153,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return true;
         case LT(0,KC_V):
-            #ifdef AUDIO_ENABLE
-                PLAY_SONG(major);
-            #endif //AUDIO_ENABLE
             if (!record->tap.count && record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(major);
+                #endif //AUDIO_ENABLE
                 tap_code16(useCMD ? G(KC_V) : C(KC_V));
                 return false;
             }
