@@ -6,9 +6,12 @@ enum layer_names {
     _BASE2,
     _SYMBOLS,
     _MOUSE,
-    _ARROW
+    _ARROW_ARROW
 };
 
+float major[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_B3),);
+
+float minor[][2] = SONG(Q__NOTE(_B3), Q__NOTE(_A3),);
 // mods
 #define      O_GUI    OSM(MOD_LGUI)
 #define      O_SFT    OSM(MOD_LSFT)
@@ -142,11 +145,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return true;
         case LT(0,KC_C):
             if (!record->tap.count && record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+
+                    PLAY_SONG(minor);
+                #endif //AUDIO_ENABLE
                 tap_code16(useCMD ? G(KC_C) : C(KC_C));
                 return false;
             }
             return true;
         case LT(0,KC_V):
+            #ifdef AUDIO_ENABLE
+                PLAY_SONG(major);
+            #endif //AUDIO_ENABLE
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(useCMD ? G(KC_V) : C(KC_V));
                 return false;
@@ -296,7 +306,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
       HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,  HOME_E,  HOME_I,     HOME_O,
   LT(0,KC_Z),  LT(0,KC_X), LT(0,KC_C), LT(_MOUSE,KC_D),         LT(0,KC_V),                               KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
-                  KC_LEFT,   KC_RIGHT,          KC_TAB,  LT(_ARROW,KC_SPC),                               KC_BSPC, KC_ENT, KC_LPRN, KC_RPRN
+                  KC_LEFT,   KC_RIGHT,          KC_TAB,  LT(_ARROW,KC_SPC),                               KC_BSPC, LT(_SYMBOLS,KC_ENT), KC_LPRN, KC_RPRN
     ),
     [_BASE2]      = LAYOUT(
         KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
