@@ -9,9 +9,12 @@ enum layer_names {
     _ARROW
 };
 
-float major[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_B3),);
+float cutSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_A3), Q__NOTE(_B3),);
+float copySound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_B3),);
+float pasteSound[][2] = SONG(Q__NOTE(_B3), Q__NOTE(_A3),);
+float undoSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_A3),);
 
-float minor[][2] = SONG(Q__NOTE(_B3), Q__NOTE(_A3),);
+
 // mods
 #define      O_GUI    OSM(MOD_LGUI)
 #define      O_SFT    OSM(MOD_LSFT)
@@ -139,6 +142,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         case LT(0,KC_X):
             if (!record->tap.count && record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(cutSound);
+                #endif //AUDIO_ENABLE
                 tap_code16(useCMD ? G(KC_X) : C(KC_X));
                 return false;
             }
@@ -146,7 +152,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case LT(0,KC_C):
             if (!record->tap.count && record->event.pressed) {
                 #ifdef AUDIO_ENABLE
-                    PLAY_SONG(minor);
+                    PLAY_SONG(copySound);
                 #endif //AUDIO_ENABLE
                 tap_code16(useCMD ? G(KC_C) : C(KC_C));
                 return false;
@@ -155,7 +161,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case LT(0,KC_V):
             if (!record->tap.count && record->event.pressed) {
                 #ifdef AUDIO_ENABLE
-                    PLAY_SONG(major);
+                    PLAY_SONG(pasteSound);
                 #endif //AUDIO_ENABLE
                 tap_code16(useCMD ? G(KC_V) : C(KC_V));
                 return false;
@@ -169,6 +175,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return true;
         case LT(0,KC_Z):
             if (!record->tap.count && record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(undoSound);
+                #endif //AUDIO_ENABLE
                 tap_code16(useCMD ? G(KC_Z) : C(KC_Z));
                 return false;
             }
@@ -193,7 +202,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return true;
         case LT(0,KC_QUOT):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_QUOT));
+                tap_code16(KC_GRV);
                 return false;
             }
             return true;
@@ -305,10 +314,10 @@ combo_t key_combos[] = {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-        KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
-      HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,  HOME_E,  HOME_I,     HOME_O,
-  LT(0,KC_Z),  LT(0,KC_X), LT(0,KC_C), LT(_MOUSE,KC_D),         LT(0,KC_V),                               KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
-                  KC_LEFT,   KC_RIGHT,          KC_TAB,  LT(_ARROW,KC_SPC),                               KC_BSPC, LT(_SYMBOLS,KC_ENT), KC_LPRN, KC_RPRN
+        KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,  LT(0,KC_QUOT),
+      HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,  HOME_E,  HOME_I,         HOME_O,
+  LT(0,KC_Z),  LT(0,KC_X), LT(0,KC_C), LT(_MOUSE,KC_D),         LT(0,KC_V),                               KC_K,    KC_H,    KC_COMM, KC_DOT,      KC_SLSH,
+                  KC_LEFT,   KC_RIGHT,          KC_TAB,  LT(_ARROW,KC_SPC),                               KC_BSPC, LT(_SYMBOLS,KC_ENT), KC_LPRN,  KC_RPRN
     ),
     [_BASE2]      = LAYOUT(
         KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
@@ -316,7 +325,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Z,         KC_X,    KC_C,    KC_D,    KC_V,                               KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
                   KC_LEFT, KC_RIGHT,  KC_TAB,  KC_SPC,                               KC_BSPC, KC_ENT, KC_LPRN, KC_RPRN
     ),
-    [_SYMBOLS     ] = LAYOUT(
+    [_SYMBOLS] = LAYOUT(
         KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
         KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
         KC_Z,         KC_X,    KC_C,    KC_D,    KC_V,                               KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
@@ -325,7 +334,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MOUSE]      = LAYOUT(
         KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J, KC_WH_D,    KC_MS_U, KC_WH_U,    KC_QUOT,
         KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M, KC_MS_L,    KC_MS_D, KC_MS_R,    KC_O,
-        KC_Z,      KC_ACL2, KC_ACL0, KC_TRNS,    KC_V,                               KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
+        KC_Z,      KC_ACL2, KC_ACL0, KC_TRNS,    KC_V,                               KC_K,    KC_H,    RTT_MSE, KC_DOT,  KC_SLSH,
                   KC_LEFT, KC_RIGHT,  KC_TAB, KC_BTN3,                               KC_BTN1, KC_BTN2, KC_LPRN, KC_RPRN
     ),
     [_ARROW]      = LAYOUT(
