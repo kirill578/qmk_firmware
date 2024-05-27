@@ -169,12 +169,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
-        case LT(0,KC_R):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(KC_R)); // Intercept hold function to send Ctrl-R
-                return false;
-            }
-            return true;
         case LT(0,KC_Z):
             if (!record->tap.count && record->event.pressed) {
                 #ifdef AUDIO_ENABLE
@@ -184,73 +178,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
-        case LT(0,KC_LBRC):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_LBRC));
-                return false;
-            }
-            return true;
-        case LT(0,KC_RBRC):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_RBRC));
-                return false;
-            }
-            return true;
-        case LT(0,KC_SLSH):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_SLSH));
-                return false;
-            }
-            return true;
         case LT(0,KC_QUOT):
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(KC_GRV);
                 return false;
             }
             return true;
-        case LT(0,KC_SCLN):
+        case LT(0,KC_SLSH):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_SCLN));
+                tap_code16(KC_EXLM);
                 return false;
             }
             return true;
-        case LT(0,KC_COMM):
+        case LT(0,KC_AMPR):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_COMM));
+                SEND_STRING("|");
                 return false;
             }
             return true;
-        case LT(0,KC_DOT):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_DOT));
-                return false;
-            }
-            return true;
-        case LT(0,KC_BSLS):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_BSLS));
-                return false;
-            }
-            return true;
-        case LT(0,KC_MINS):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_MINS));
-                return false;
-            }
-            return true;
-        case LT(0,KC_EQL):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(S(KC_EQL));
-                return false;
-            }
-            return true;
-        case PRINT:
-            if (record->tap.count && record->event.pressed) {
-                tap_code16(G(S(C((KC_F5)))));
-            } else if (record->event.pressed) {
-                tap_code16(G(S(KC_4)));
-            }
-            return false;
         case KC_P0:
         case KC_P1:
         case KC_P2:
@@ -366,22 +311,16 @@ void leader_end_user(void) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-        KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,  LT(0,KC_QUOT),
-      HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,  HOME_E,  HOME_I,         HOME_O,
-  LT(0,KC_Z),  LT(0,KC_X), LT(0,KC_C), LT(_MOUSE,KC_D),         LT(0,KC_V),                               KC_K,    KC_H,    KC_COMM, KC_DOT,      KC_SLSH,
-                  KC_LEFT,   KC_RIGHT,          KC_TAB,  LT(_ARROW,KC_SPC),                               KC_BSPC, LT(_SYMBOLS,KC_ENT), KC_LPRN,  KC_RPRN
-    ),
-    [_BASE2]      = LAYOUT(
-        KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
-        KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
-        KC_Z,         KC_X,    KC_C,    KC_D,    KC_V,                               KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
-                  KC_LEFT, KC_RIGHT,  KC_TAB,  KC_SPC,                               KC_BSPC, KC_ENT, KC_LPRN, KC_RPRN
+        KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,       KC_U,         KC_Y,         LT(0,KC_QUOT),
+      HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,     HOME_E,       HOME_I,                HOME_O,
+  LT(0,KC_Z),  LT(0,KC_X), LT(0,KC_C), LT(_MOUSE,KC_D),         LT(0,KC_V),                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         LT(0,KC_SLSH),
+                  KC_LEFT,   KC_RIGHT,          KC_TAB,  LT(_ARROW,KC_SPC),                               KC_BSPC, LT(_SYMBOLS,KC_ENT), LT(0,KC_AMPR),  KC_SCLN
     ),
     [_SYMBOLS] = LAYOUT(
-        KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
-        KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
-        KC_Z,         KC_X,    KC_C,    KC_D,    KC_V,                               KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
-                  KC_LEFT, KC_RIGHT,  KC_TAB,  KC_SPC,                               KC_BSPC, KC_ENT, KC_LPRN, KC_RPRN
+        KC_CIRC,     KC_F7,    KC_F8,   KC_F9,  KC_F10,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
+        KC_AT,       KC_F4,    KC_F5,   KC_F6,  KC_F11,                              KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
+        KC_HASH,     KC_F1,    KC_F2,   KC_F3,  KC_F12,                              KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
+                   KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS, KC_LPRN, KC_RPRN
     ),
     [_MOUSE]      = LAYOUT(
         KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J, KC_WH_D,    KC_MS_U, KC_WH_U,    KC_QUOT,
@@ -390,10 +329,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                   KC_LEFT, KC_RIGHT,  KC_TAB, KC_BTN3,                               KC_BTN1, KC_BTN2, KC_LPRN, KC_RPRN
     ),
     [_ARROW]      = LAYOUT(
-       KC_NO,        KC_NO,    KC_UP,      KC_NO,   KC_NO,                               KC_NO,  KC_P7,          KC_P8,                     KC_P9,                     KC_PPLS,
-     KC_HOME,      KC_LEFT,  KC_DOWN,    KC_RGHT,  KC_END,                               KC_NO,  RSFT_T(KC_P4),  RGUI_T(KC_P5),             LALT_T(KC_P6),             RCTL_T(KC_PCMM),
-        KC_Z,   KC_MS_BTN4,     KC_C, KC_MS_BTN5,    KC_V,                               KC_P0,  KC_P1,   KC_P2,  KC_P3, KC_PEQL,
-                   KC_LEFT, KC_RIGHT,     KC_TAB,  KC_SPC,                               KC_BSPC, KC_PENT, KC_LPRN, KC_PDOT
+       KC_NO,        KC_NO,    KC_UP,      KC_NO,   KC_NO,                               KC_PEQL,         KC_P7,          KC_P8,         KC_P9,  KC_DLR,
+     KC_HOME,      KC_LEFT,  KC_DOWN,    KC_RGHT,  KC_END,                               KC_PPLS,  RSFT_T(KC_P4),  RGUI_T(KC_P5), LALT_T(KC_P6), KC_PERC,
+        KC_Z,   KC_MS_BTN4,     KC_C, KC_MS_BTN5,    KC_V,                               KC_ASTR,         KC_P1,          KC_P2,         KC_P3,  KC_PEQL,
+                   KC_LEFT, KC_RIGHT,     KC_TAB,  KC_SPC,                               KC_TRNS, KC_P0, KC_BSLS, KC_PDOT
     )
 };
 
