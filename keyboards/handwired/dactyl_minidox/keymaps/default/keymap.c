@@ -6,6 +6,7 @@ enum layer_names {
     _BASE2,
     _SYMBOLS,
     _MOUSE,
+    _MOUSE_AUTO,
     _ARROW
 };
 
@@ -98,20 +99,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             // Let QMK process the KC_BSPC keycode as usual outside of shift
             return true;
         }
-        case LT(_ARROW,KC_SPC):
+        case KC_LEFT:
             {
             // Initialize a boolean variable that keeps track
             // of the delete key status: registered or not?
-            static bool delkey_registered;
+            static bool key_registered;
             if (record->event.pressed) {
                 // Detect the activation of either shift keys
-                if (mod_state & MOD_MASK_SHIFT) {
+                if (mod_state & MOD_MASK_CSA) {
                     // First temporarily canceling both shifts so that
                     // shift isn't applied to the KC_DEL keycode
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code(KC_BSPC);
+                    del_mods(MOD_MASK_CSA);
+                    register_code(KC_MS_BTN4);
                     // Update the boolean variable to reflect the status of KC_DEL
-                    delkey_registered = true;
+                    key_registered = true;
                     // Reapplying modifier state so that the held shift key(s)
                     // still work even after having tapped the Backspace/Delete key.
                     set_mods(mod_state);
@@ -119,9 +120,39 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             } else { // on release of KC_BSPC
                 // In case KC_DEL is still being sent even after the release of KC_BSPC
-                if (delkey_registered) {
-                    unregister_code(KC_BSPC);
-                    delkey_registered = false;
+                if (key_registered) {
+                    unregister_code(KC_MS_BTN4);
+                    key_registered = false;
+                    return false;
+                }
+            }
+            // Let QMK process the KC_BSPC keycode as usual outside of shift
+            return true;
+        }
+        case KC_RIGHT:
+            {
+            // Initialize a boolean variable that keeps track
+            // of the delete key status: registered or not?
+            static bool key_registered;
+            if (record->event.pressed) {
+                // Detect the activation of either shift keys
+                if (mod_state & MOD_MASK_CSA) {
+                    // First temporarily canceling both shifts so that
+                    // shift isn't applied to the KC_DEL keycode
+                    del_mods(MOD_MASK_CSA);
+                    register_code(KC_MS_BTN5);
+                    // Update the boolean variable to reflect the status of KC_DEL
+                    key_registered = true;
+                    // Reapplying modifier state so that the held shift key(s)
+                    // still work even after having tapped the Backspace/Delete key.
+                    set_mods(mod_state);
+                    return false;
+                }
+            } else { // on release of KC_BSPC
+                // In case KC_DEL is still being sent even after the release of KC_BSPC
+                if (key_registered) {
+                    unregister_code(KC_MS_BTN5);
+                    key_registered = false;
                     return false;
                 }
             }
@@ -218,6 +249,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
+static uint16_t trackpoint_timer;
+extern int tp_buttons;
+
+void ps2_mouse_moved_user(report_mouse_t *mouse_report) { // Whenever the TrackPoint starts moving, check if the timer exists.
+    if (trackpoint_timer) {
+        trackpoint_timer = timer_read();
+    } else {
+        if (!tp_buttons) { //I'm still a bit confused about this one, but I believe it checks that if the mousekey state isn't set, turn on this layer specified?
+            layer_on(_MOUSE_AUTO);
+            trackpoint_timer = timer_read();
+        }
+
+    }
+}
+
+void matrix_scan_user(void) {  // ALWAYS RUNNING VOID FUNCTION, CAN BE USED TO CHECK CLOCK RUNTIMES OVER THE DURATION THAT THE KEYBOARD IS POWERED ON
+  if (trackpoint_timer && (timer_elapsed(trackpoint_timer) > 750)) { //If the time of both the TP timer
+    if (!tp_buttons) {
+      layer_off(_MOUSE_AUTO);
+      trackpoint_timer = 0; //Reset the timer again until the mouse moves more
+    }
+  }
+}
+
 enum combos {
     TN_CW_TOGGLE,
     ST_OP,
@@ -309,7 +364,7 @@ void leader_end_user(void) {
     } else if (leader_sequence_four_keys(KC_S, KC_C, KC_A, KC_P)) {
         tap_code16(G(S(KC_4)));
     } else if (leader_sequence_four_keys(KC_B, KC_O, KC_O, KC_T)) {
-        tap_code16(QK_BOOTLOADER);
+        reset_keyboard();
     }
 }
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -326,6 +381,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                    KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS, KC_LPRN, KC_RPRN
     ),
     [_MOUSE]      = LAYOUT(
+        KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J, KC_WH_D,    KC_MS_U, KC_WH_U,    KC_QUOT,
+        KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M, KC_MS_L,    KC_MS_D, KC_MS_R,    KC_O,
+        KC_Z,      KC_ACL2, KC_ACL0, KC_TRNS,    KC_V,                               KC_K,    KC_H,    RTT_MSE, KC_DOT,  KC_SLSH,
+                  KC_LEFT, KC_RIGHT,  KC_TAB, KC_BTN3,                               KC_BTN1, KC_BTN2, KC_LPRN, KC_RPRN
+    ),
+    [_MOUSE_AUTO]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
         KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J, KC_WH_D,    KC_MS_U, KC_WH_U,    KC_QUOT,
         KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M, KC_MS_L,    KC_MS_D, KC_MS_R,    KC_O,
         KC_Z,      KC_ACL2, KC_ACL0, KC_TRNS,    KC_V,                               KC_K,    KC_H,    RTT_MSE, KC_DOT,  KC_SLSH,

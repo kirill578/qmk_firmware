@@ -7,8 +7,9 @@
 
 #define SELECT_SOFT_SERIAL_SPEED 1
 
-#define SPLIT_HAND_PIN F4
-#define	SPLIT_HAND_PIN_LOW_IS_LEFT
+#define EE_HANDS
+//#define SPLIT_HAND_PIN F4
+//#define	SPLIT_HAND_PIN_LOW_IS_LEFT // seems flaky going with eproom for now
 
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 600
