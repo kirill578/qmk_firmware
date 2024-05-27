@@ -195,6 +195,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING("|");
                 return false;
             }
+            if (record->tap.count && record->event.pressed) {
+                SEND_STRING("&");
+                return false;
+            }
             return true;
         case KC_P0:
         case KC_P1:
@@ -308,7 +312,6 @@ void leader_end_user(void) {
         tap_code16(QK_BOOTLOADER);
     }
 }
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
         KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,       KC_U,         KC_Y,         LT(0,KC_QUOT),
