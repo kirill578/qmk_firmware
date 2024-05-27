@@ -10,6 +10,9 @@
 #define SPLIT_HAND_PIN F4
 #define	SPLIT_HAND_PIN_LOW_IS_LEFT
 
+#define LEADER_PER_KEY_TIMING
+#define LEADER_TIMEOUT 600
+#define LEADER_NO_TIMEOUT
 
 // Configure the global tapping term (default: 200ms)
 #define TAPPING_TERM 200

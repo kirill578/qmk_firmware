@@ -14,6 +14,8 @@ float copySound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_B3),);
 float pasteSound[][2] = SONG(Q__NOTE(_B3),);
 float undoSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_A3),);
 
+float leadSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1), Q__NOTE(_C2), Q__NOTE(_C4),);
+
 
 // mods
 #define      O_GUI    OSM(MOD_LGUI)
@@ -284,6 +286,7 @@ enum combos {
     ST_OP,
     NE_CP,
     NI_DEL,
+    GM_LEAD,
     _46_DEL,
     FP_OC,
     LU_CC,
@@ -297,6 +300,7 @@ const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
 const uint16_t PROGMEM st_op[] = {HOME_S, HOME_T, COMBO_END};
 const uint16_t PROGMEM ne_cp[] = {HOME_N, HOME_E, COMBO_END};
 const uint16_t PROGMEM ni_del[] = {HOME_N, HOME_I, COMBO_END};
+const uint16_t PROGMEM gm_lead[] = {HOME_G, HOME_M, COMBO_END};
 const uint16_t PROGMEM _46_del[] = {RSFT_T(KC_P4), LALT_T(KC_P6), COMBO_END};
 const uint16_t PROGMEM fp_oc[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM lu_cc[] = {KC_L, KC_U, COMBO_END};
@@ -311,6 +315,7 @@ combo_t key_combos[] = {
     [ST_OP] = COMBO(st_op, S(KC_9)),
     [NE_CP] = COMBO(ne_cp, S(KC_0)),
     [NI_DEL] = COMBO(ni_del, KC_DEL),
+    [GM_LEAD] = COMBO(gm_lead, QK_LEAD),
     [_46_DEL] = COMBO(_46_del, KC_DEL),
     [FP_OC] = COMBO(fp_oc, KC_LCBR),
     [LU_CC] = COMBO(lu_cc, KC_RCBR),
@@ -319,6 +324,50 @@ combo_t key_combos[] = {
     [CD_LBRC] = COMBO(cd_lbrc, KC_LBRC),
     [HCOMMA_RBRC] = COMBO(hcomma_rbrc, KC_RBRC)
 };
+
+
+void leader_start_user(void) {
+    #ifdef AUDIO_ENABLE
+        PLAY_SONG(leadSound);
+    #endif //AUDIO_ENABLE
+}
+
+void leader_end_user(void) {
+    if (leader_sequence_two_keys(KC_O, KC_R)) {
+        SEND_STRING("|");
+    } else if (leader_sequence_two_keys(KC_A, KC_T)) {
+        SEND_STRING("@");
+    } else if (leader_sequence_two_keys(KC_E, KC_X)) {
+        SEND_STRING("!");
+    } else if (leader_sequence_two_keys(KC_L, KC_T)) {
+        SEND_STRING("<");
+    } else if (leader_sequence_two_keys(KC_G, KC_T)) {
+        SEND_STRING(">");
+    } else if (leader_sequence_two_keys(KC_E, KC_Q)) {
+        SEND_STRING("=");
+    } else if (leader_sequence_two_keys(KC_C, KC_O)) {
+        SEND_STRING(":");
+    } else if (leader_sequence_two_keys(KC_S, KC_C)) {
+        SEND_STRING(";");
+    } else if (leader_sequence_two_keys(KC_U, KC_S)) {
+        SEND_STRING("_");
+    } else if (leader_sequence_two_keys(KC_P, KC_L)) {
+        SEND_STRING("+");
+    } else if (leader_sequence_four_keys(KC_A, KC_F, KC_U, KC_N)) {
+        SEND_STRING("() => {}");
+        tap_code16(KC_LEFT);
+        tap_code16(KC_ENTER);
+        tap_code16(KC_TAB);
+    } else if (leader_sequence_four_keys(KC_F, KC_U, KC_N, KC_C)) {
+        SEND_STRING("function() {}");
+        tap_code16(KC_LEFT);
+        tap_code16(KC_ENTER);
+        tap_code16(KC_TAB);
+    } else if (leader_sequence_four_keys(KC_B, KC_O, KC_O, KC_T)) {
+        tap_code16(QK_BOOTLOADER);
+    }
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
         KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,  LT(0,KC_QUOT),
