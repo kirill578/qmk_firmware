@@ -251,18 +251,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code16(G(S(KC_4)));
             }
             return false;
-        case DEPLOYTEST:
-            if (record->event.pressed) {
-                // when keycode QMKBEST is pressed
-                SEND_STRING("yarn build:test && yarn deploy:test\n");
-            }
-            return false;
-        case INVALIATE:
-            if (record->event.pressed) {
-                // when keycode QMKBEST is pressed
-                SEND_STRING("yarn invalidate-cache:test\n");
-            }
-            return false;
         case KC_P0:
         case KC_P1:
         case KC_P2:
@@ -353,6 +341,8 @@ void leader_end_user(void) {
         SEND_STRING("_");
     } else if (leader_sequence_two_keys(KC_P, KC_L)) {
         SEND_STRING("+");
+    } else if (leader_sequence_three_keys(KC_A, KC_N, KC_D)) {
+        SEND_STRING("&");
     } else if (leader_sequence_four_keys(KC_A, KC_F, KC_U, KC_N)) {
         SEND_STRING("() => {}");
         tap_code16(KC_LEFT);
@@ -363,6 +353,12 @@ void leader_end_user(void) {
         tap_code16(KC_LEFT);
         tap_code16(KC_ENTER);
         tap_code16(KC_TAB);
+    } else if (leader_sequence_four_keys(KC_D, KC_E, KC_P, KC_L)) {
+        SEND_STRING("yarn build:test && yarn deploy:test\n");
+    } else if (leader_sequence_four_keys(KC_I, KC_N, KC_V, KC_A)) {
+        SEND_STRING("yarn invalidate-cache:test\n");
+    } else if (leader_sequence_four_keys(KC_S, KC_C, KC_A, KC_P)) {
+        tap_code16(G(S(KC_4)));
     } else if (leader_sequence_four_keys(KC_B, KC_O, KC_O, KC_T)) {
         tap_code16(QK_BOOTLOADER);
     }
