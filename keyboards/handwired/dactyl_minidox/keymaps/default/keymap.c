@@ -106,9 +106,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         case LT(_MOUSE,KC_D):
             if (record->event.pressed) {
-                ps2_set_multiplier(4);
+                ps2_set_multiplier(6);
             } else {
-                ps2_set_multiplier(1);
+                ps2_set_multiplier(2);
+            }
+            return true;
+        case KC_ACL0:
+            if (record->event.pressed) {
+                ps2_set_multiplier(1);  // todo make it more reliable
             }
             return true;
         case KC_LEFT:
@@ -396,19 +401,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J, KC_WH_D,    KC_MS_U, KC_WH_U,    KC_QUOT,
         KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M, KC_MS_L,    KC_MS_D, KC_MS_R,    KC_O,
         KC_Z,      KC_ACL2, KC_ACL0, KC_TRNS,    KC_V,                               KC_K,    KC_H,    RTT_MSE, KC_DOT,  KC_SLSH,
-                  KC_LEFT, KC_RIGHT,  KC_TAB, KC_BTN3,                               KC_BTN1, KC_BTN2, KC_LPRN, KC_RPRN
+                  KC_BTN4, KC_BTN5,  KC_TAB, KC_BTN3,                               KC_BTN1, KC_BTN2, KC_LPRN, KC_RPRN
     ),
     [_MOUSE_AUTO]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
         KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J, KC_WH_D,    KC_MS_U, KC_WH_U,    KC_QUOT,
         KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M, KC_MS_L,    KC_MS_D, KC_MS_R,    KC_O,
         KC_Z,      KC_ACL2, KC_ACL0, KC_TRNS,    KC_V,                               KC_K,    KC_H,    RTT_MSE, KC_DOT,  KC_SLSH,
-                  KC_LEFT, KC_RIGHT,  KC_TAB, KC_BTN3,                               KC_BTN1, KC_BTN2, KC_LPRN, KC_RPRN
+                  KC_BTN4, KC_BTN5,  KC_TAB, KC_BTN3,                               KC_BTN1, KC_BTN2, KC_LPRN, KC_RPRN
     ),
     [_ARROW]      = LAYOUT(
        KC_NO,        KC_NO,    KC_UP,      KC_NO,   KC_NO,                               KC_PEQL,         KC_P7,          KC_P8,         KC_P9,  KC_DLR,
      KC_HOME,      KC_LEFT,  KC_DOWN,    KC_RGHT,  KC_END,                               KC_PPLS,  RSFT_T(KC_P4),  RGUI_T(KC_P5), LALT_T(KC_P6), KC_PERC,
         KC_Z,   KC_MS_BTN4,     KC_C, KC_MS_BTN5,    KC_V,                               KC_ASTR,         KC_P1,          KC_P2,         KC_P3,  KC_PEQL,
-                   KC_LEFT, KC_RIGHT,     KC_TAB,  KC_SPC,                               KC_TRNS, KC_P0, KC_BSLS, KC_PDOT
+                    KC_BTN4, KC_BTN5,     KC_TAB,  KC_SPC,                               KC_TRNS, KC_P0, KC_BSLS, KC_PDOT
     )
 };
 

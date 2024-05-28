@@ -165,7 +165,7 @@ void ps2_mouse_set_sample_rate(ps2_mouse_sample_rate_t sample_rate) {
 }
 
 /* ============================= HELPERS ============================ */
-uint8_t globalM = 1;
+uint8_t globalM = 2;
 void ps2_set_multiplier(uint8_t m) {
     globalM = m;
 }
