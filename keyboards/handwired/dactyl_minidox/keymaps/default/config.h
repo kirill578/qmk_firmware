@@ -81,8 +81,8 @@
 #define PS2_USART_ERROR         (UCSR1A & ((1<<FE1) | (1<<DOR1) | (1<<UPE1)))
 #define PS2_USART_RX_VECT       USART1_RX_vect
 
-#define PS2_MOUSE_X_MULTIPLIER 2
-#define PS2_MOUSE_Y_MULTIPLIER 2
+#define PS2_MOUSE_X_MULTIPLIER 1
+#define PS2_MOUSE_Y_MULTIPLIER 1
 #define PS2_MOUSE_V_MULTIPLIER 10
 
 #define PS2_MOUSE_SCROLL_BTN_MASK 0 // disable scroll on middle button

@@ -165,6 +165,10 @@ void ps2_mouse_set_sample_rate(ps2_mouse_sample_rate_t sample_rate) {
 }
 
 /* ============================= HELPERS ============================ */
+uint8_t globalM = 1;
+void ps2_set_multiplier(uint8_t m) {
+    globalM = m;
+}
 
 static inline void ps2_mouse_convert_report_to_hid(report_mouse_t *mouse_report, const uint8_t mdp_b0) {
 #ifndef MOUSE_EXTENDED_REPORT
@@ -191,6 +195,9 @@ static inline void ps2_mouse_convert_report_to_hid(report_mouse_t *mouse_report,
     mouse_report->y *= PS2_MOUSE_Y_MULTIPLIER;
 #endif
     mouse_report->v *= PS2_MOUSE_V_MULTIPLIER;
+
+    mouse_report->x *= globalM;
+    mouse_report->y *= globalM;
 
 #ifdef PS2_MOUSE_INVERT_BUTTONS
     // swap left & right buttons

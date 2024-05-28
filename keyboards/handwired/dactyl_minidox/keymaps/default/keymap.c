@@ -1,5 +1,10 @@
 #include QMK_KEYBOARD_H
 
+#ifdef PS2_MOUSE_ENABLE
+    #include "ps2_mouse.h"
+    #include "ps2.h"
+#endif
+
 #define PRINT LT(0,MEH(KC_F5))
 enum layer_names {
     _BASE,
@@ -99,6 +104,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             // Let QMK process the KC_BSPC keycode as usual outside of shift
             return true;
         }
+        case LT(_MOUSE,KC_D):
+            if (record->event.pressed) {
+                ps2_set_multiplier(4);
+            } else {
+                ps2_set_multiplier(1);
+            }
+            return true;
         case KC_LEFT:
             {
             // Initialize a boolean variable that keeps track
@@ -400,10 +412,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-#ifdef PS2_MOUSE_ENABLE
-    #include "ps2_mouse.h"
-    #include "ps2.h"
-#endif
 
 #ifdef PS2_MOUSE_ENABLE
 void ps2_mouse_init_user() {
