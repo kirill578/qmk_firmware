@@ -405,7 +405,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_MOUSE_AUTO]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
         KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J, KC_WH_D,    KC_MS_U, KC_WH_U,    KC_QUOT,
-        KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M, KC_MS_L,    KC_MS_D, KC_MS_R,    KC_O,
+        KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M, KC_MS_L,    KC_WH_D, KC_WH_U,    KC_O,
         KC_Z,      KC_ACL2, KC_ACL0, KC_TRNS,    KC_V,                               KC_K,    KC_H,    RTT_MSE, KC_DOT,  KC_SLSH,
                   KC_BTN4, KC_BTN5,  KC_TAB, KC_BTN3,                               KC_BTN1, KC_BTN2, KC_LPRN, KC_RPRN
     ),
