@@ -302,7 +302,8 @@ enum combos {
     COMMA_DOT_MINUS,
     QW_ESC,
     CD_LBRC,
-    HCOMMA_RBRC
+    HCOMMA_RBRC,
+    YOU_COMBO
 };
 
 const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
@@ -317,6 +318,7 @@ const uint16_t PROGMEM comma_dot_minus[] = {KC_COMM, KC_DOT, COMBO_END};
 const uint16_t PROGMEM qw_esc[] = {KC_Q, KC_W, COMBO_END};
 const uint16_t PROGMEM cd_lbrc[] = {LT(0,KC_C), LT(_MOUSE,KC_D), COMBO_END};
 const uint16_t PROGMEM hcomma_rbrc[] = {KC_H, KC_COMM, COMBO_END};
+const uint16_t PROGMEM you_combo[] = {KC_Y, KC_U, COMBO_END};
 
 
 combo_t key_combos[] = {
@@ -331,9 +333,24 @@ combo_t key_combos[] = {
     [COMMA_DOT_MINUS] = COMBO(comma_dot_minus, KC_MINS),
     [QW_ESC] = COMBO(qw_esc, KC_ESC),
     [CD_LBRC] = COMBO(cd_lbrc, KC_LBRC),
-    [HCOMMA_RBRC] = COMBO(hcomma_rbrc, KC_RBRC)
+    [HCOMMA_RBRC] = COMBO(hcomma_rbrc, KC_RBRC),
+    [YOU_COMBO] = COMBO_ACTION(you_combo)
 };
 
+void process_combo_event(uint16_t combo_index, bool pressed) {
+  mod_state = get_mods();
+  switch(combo_index) {
+    case YOU_COMBO:
+      if (pressed) {
+        if (mod_state & MOD_MASK_SHIFT) {
+          SEND_STRING("You");
+        } else {
+          SEND_STRING("you");
+        }
+      }
+      break;
+  }
+}
 
 void leader_start_user(void) {
     #ifdef AUDIO_ENABLE
