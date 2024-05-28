@@ -29,9 +29,9 @@
 #define MK_3_SPEED 300
 
 #define MK_C_OFFSET_UNMOD	16
-#define MK_C_INTERVAL_UNMOD	12
+#define MK_C_INTERVAL_UNMOD	2
 #define MK_C_OFFSET_0	2
-#define MK_C_INTERVAL_0	8
+#define MK_C_INTERVAL_0	2
 
 
 #define PS2_CLOCK_PIN   D5
@@ -80,3 +80,9 @@
 #define PS2_USART_RX_DATA       UDR1
 #define PS2_USART_ERROR         (UCSR1A & ((1<<FE1) | (1<<DOR1) | (1<<UPE1)))
 #define PS2_USART_RX_VECT       USART1_RX_vect
+
+#define PS2_MOUSE_X_MULTIPLIER 2
+#define PS2_MOUSE_Y_MULTIPLIER 2
+#define PS2_MOUSE_V_MULTIPLIER 10
+
+#define PS2_MOUSE_SCROLL_BTN_MASK 0 // disable scroll on middle button
