@@ -11,6 +11,8 @@
 //#define SPLIT_HAND_PIN F4
 //#define	SPLIT_HAND_PIN_LOW_IS_LEFT // seems flaky going with eproom for now
 
+#define PS2_MOUSE_USE_REMOTE_MODE
+
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 600
 #define LEADER_NO_TIMEOUT
