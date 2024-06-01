@@ -45,6 +45,8 @@
 #define BOOTMAGIC_ROW_RIGHT 4
 #define BOOTMAGIC_COLUMN_RIGHT 4
 
+#define NO_MUSIC_MODE
+
 #define AUDIO_PIN C6
 
 // #define NO_MUSIC_MODE

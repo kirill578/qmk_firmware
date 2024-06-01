@@ -477,9 +477,9 @@ void leader_end_user(void) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-        KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,       KC_U,         KC_Y,         LT(0,KC_QUOT),
-      HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,     HOME_E,       HOME_I,                HOME_O,
-      HOME_Z,      HOME_X,     HOME_C,          HOME_D,             HOME_V,                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         LT(0,KC_SLSH),
+        KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,       KC_U,         KC_Y,   LT(0,KC_QUOT),
+      HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,     HOME_E,       HOME_I,          HOME_O,
+      HOME_Z,      HOME_X,     HOME_C,          HOME_D,             HOME_V,                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         KC_QUES,
                   KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC, LT(_SYMBOLS,KC_ENT), LT(0,KC_AMPR),  KC_SCLN
     ),
     [_SYMBOLS] = LAYOUT(
@@ -548,3 +548,57 @@ void ps2_mouse_init_user() {
 
 }
 #endif
+
+
+// ┌─────────────────────────────────────────────────┐
+// │ d e f i n e   k e y   o v e r r i d e s         │
+// └─────────────────────────────────────────────────┘
+
+// shift + ? = !
+const key_override_t quexclam_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUES, KC_EXLM);
+
+// Override comma key: no mod = , | shift = ; | ctrl+shift = <
+const key_override_t semicolon_override =
+  ko_make_with_layers_negmods_and_options(
+      MOD_MASK_SHIFT,       // Trigger modifiers: shift
+      KC_COMM,             // Trigger key: meh_comma hold tap key
+      KC_SCLN,             // Replacement key: ;
+      ~0,                  // Activate on all layers
+      MOD_MASK_CA,         // Do not activate when ctrl, alt or gui is pressed
+      ko_option_no_reregister_trigger);
+const key_override_t lt_override =
+  ko_make_with_layers_negmods_and_options(
+    MOD_MASK_CS,      // Trigger modifiers: ctrl+shift
+    KC_COMM,         // Trigger key: meh_comma hold tap key
+    KC_LT,         // Replacemeng key: <
+    ~0,              // All layers
+    MOD_MASK_AG,     // Do not activate when alt or gui is pressed
+    ko_option_no_reregister_trigger);
+
+// Override . key: no mod = . | shift = : | ctrl+shift = >
+const key_override_t colon_override =
+  ko_make_with_layers_negmods_and_options(
+      MOD_MASK_SHIFT,      // Trigger modifiers: shift
+      KC_DOT,              // Trigger key: dot key
+      KC_COLN,             // Replacement key: :
+      ~0,                  // Activate on all layers
+      MOD_MASK_CA,        // Do not activate when ctrl or alt is pressed
+      ko_option_no_reregister_trigger);
+const key_override_t gt_override =
+  ko_make_with_layers_negmods_and_options(
+    MOD_MASK_CS,           // Trigger modifiers: ctrl+shift
+    KC_DOT,                // Trigger key: dot key
+    KC_GT,                 // Replacemeng key: >
+    ~0,                    // All layers
+    MOD_MASK_AG,           // Do not activate when alt or gui is pressed
+    ko_option_no_reregister_trigger);
+
+// This globally defines all key overrides to be used ├───────────┐
+const key_override_t **key_overrides = (const key_override_t *[]){
+  &quexclam_override,
+  &semicolon_override,
+  &lt_override,
+  &colon_override,
+  &gt_override,
+  NULL // Null terminate the array of overrides!
+};
