@@ -59,6 +59,8 @@ float leadSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1), Q__NOTE(_C2), Q__NOTE(_C
 #define HOME_D LT(_MOUSE,KC_D)
 #define HOME_V LT(0,KC_V)
 
+#define HOME_SPACE LT(_ARROW,KC_SPC)
+
 enum custom_keycodes {
     DEPLOYTEST = SAFE_RANGE,
     INVALIATE,
@@ -331,7 +333,9 @@ enum combos {
     UNDS_V,
     MIN_V,
     SLSH_V,
-    PIPE_V
+    PIPE_V,
+
+    WORD_BSPC
 };
 
 const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
@@ -369,6 +373,7 @@ const uint16_t PROGMEM min_v[] = {HOME_N, KC_H, COMBO_END};
 const uint16_t PROGMEM slsh_v[] = {HOME_E, KC_COMM, COMBO_END};
 const uint16_t PROGMEM pipe_v[] = {HOME_I, KC_DOT, COMBO_END};
 
+const uint16_t PROGMEM word_bspc[] = {HOME_SPACE, KC_BSPC, COMBO_END};
 
 combo_t key_combos[] = {
     [TN_CW_TOGGLE] = COMBO(tn_cw_toggle, CW_TOGG),
@@ -404,10 +409,24 @@ combo_t key_combos[] = {
     [UNDS_V] =  COMBO(unds_v, KC_UNDS),
     [MIN_V] =  COMBO(min_v, KC_MINS),
     [SLSH_V] =  COMBO(slsh_v, KC_SLSH),
-    [PIPE_V] =  COMBO(pipe_v, KC_PIPE)
+    [PIPE_V] =  COMBO(pipe_v, KC_PIPE),
+
+    [WORD_BSPC] = COMBO_ACTION(word_bspc)
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
+  bool useCMD = false;
+  switch (detected_host_os()) {
+      case OS_UNSURE:
+        useCMD = true;
+        break;
+      case OS_MACOS:
+      case OS_IOS:
+        useCMD = true;
+        break;
+      default:
+        break;
+  }
   mod_state = get_mods();
   switch(combo_index) {
     case YOU_COMBO:
@@ -419,6 +438,10 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
         }
       }
       break;
+     case WORD_BSPC:
+        if (pressed) {
+            tap_code16(useCMD ? A(KC_BSPC) : C(KC_BSPC));
+        }
   }
 }
 
@@ -457,7 +480,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,       KC_U,         KC_Y,         LT(0,KC_QUOT),
       HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,     HOME_E,       HOME_I,                HOME_O,
       HOME_Z,      HOME_X,     HOME_C,          HOME_D,             HOME_V,                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         LT(0,KC_SLSH),
-                  KC_LEFT,   KC_RIGHT,          KC_TAB,  LT(_ARROW,KC_SPC),                               KC_BSPC, LT(_SYMBOLS,KC_ENT), LT(0,KC_AMPR),  KC_SCLN
+                  KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC, LT(_SYMBOLS,KC_ENT), LT(0,KC_AMPR),  KC_SCLN
     ),
     [_SYMBOLS] = LAYOUT(
         KC_CIRC,     KC_F7,    KC_F8,   KC_F9,  KC_F10,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
