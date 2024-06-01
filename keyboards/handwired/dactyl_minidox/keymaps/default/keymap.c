@@ -359,34 +359,12 @@ void leader_start_user(void) {
 }
 
 void leader_end_user(void) {
-    if (leader_sequence_two_keys(KC_O, KC_R)) {
-        SEND_STRING("|");
-    } else if (leader_sequence_two_keys(KC_A, KC_T)) {
-        SEND_STRING("@");
-    } else if (leader_sequence_two_keys(KC_E, KC_X)) {
-        SEND_STRING("!");
-    } else if (leader_sequence_two_keys(KC_L, KC_T)) {
-        SEND_STRING("<");
-    } else if (leader_sequence_two_keys(KC_G, KC_T)) {
-        SEND_STRING(">");
-    } else if (leader_sequence_two_keys(KC_E, KC_Q)) {
-        SEND_STRING("=");
-    } else if (leader_sequence_two_keys(KC_C, KC_O)) {
-        SEND_STRING(":");
-    } else if (leader_sequence_two_keys(KC_S, KC_C)) {
-        SEND_STRING(";");
-    } else if (leader_sequence_two_keys(KC_U, KC_S)) {
-        SEND_STRING("_");
-    } else if (leader_sequence_two_keys(KC_P, KC_L)) {
-        SEND_STRING("+");
-    } else if (leader_sequence_three_keys(KC_A, KC_N, KC_D)) {
-        SEND_STRING("&");
-    } else if (leader_sequence_four_keys(KC_A, KC_F, KC_U, KC_N)) {
+    if (leader_sequence_two_keys(KC_A, KC_F)) {
         SEND_STRING("() => {}");
         tap_code16(KC_LEFT);
         tap_code16(KC_ENTER);
         tap_code16(KC_TAB);
-    } else if (leader_sequence_four_keys(KC_F, KC_U, KC_N, KC_C)) {
+    } else if (leader_sequence_two_keys(KC_F, KC_N)) {
         SEND_STRING("function() {}");
         tap_code16(KC_LEFT);
         tap_code16(KC_ENTER);
@@ -415,16 +393,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                    KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS, KC_LPRN, KC_RPRN
     ),
     [_MOUSE]      = LAYOUT(
-        KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J, KC_WH_D,    KC_MS_U, KC_WH_U,    KC_QUOT,
-        KC_A,         KC_R,    KC_S,    KC_T,    KC_G,                               KC_M, KC_MS_L,    KC_MS_D, KC_MS_R,    KC_F12,
-        KC_Z,      KC_ACL2, KC_ACL0, KC_TRNS,    KC_V,                               KC_K,    KC_H,    RTT_MSE, KC_DOT,  KC_SLSH,
-                  KC_BTN4, KC_BTN5,  KC_TAB, KC_BTN3,                               KC_BTN1, KC_BTN2, KC_BTN4, KC_BTN5
+        _______,     _______,    _______,    _______,    _______,                    KC_WH_L,    KC_WH_D,    KC_MS_U,  KC_WH_U,   KC_WH_R,
+        _______,     _______,    _______,    _______,    _______,                    _______,    KC_MS_L,    KC_MS_D,  KC_MS_R,    KC_F12,
+        _______,     KC_ACL2,    KC_ACL0,    KC_TRNS,    _______,                    _______,    _______,    RTT_MSE,   _______,  _______,
+                     KC_BTN4,     KC_BTN5,   _______,   KC_BTN3,                     KC_BTN1,    KC_BTN2,    KC_WH_D,  KC_WH_U
     ),
     [_MOUSE_AUTO]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
-        KC_Q,         KC_W,    KC_F,    KC_P,    KC_B,                               KC_J, KC_WH_D,    KC_MS_U, KC_WH_U,    KC_QUOT,
-        HOME_A,     HOME_R,  HOME_S,  HOME_T,    HOME_G,                               KC_M, KC_MS_L,    KC_WH_D, KC_WH_U,    KC_F12,
-        KC_Z,      KC_ACL2, KC_ACL0, KC_TRNS,    KC_V,                               KC_K,    KC_H,    RTT_MSE, KC_DOT,  KC_SLSH,
-                  KC_BTN4, KC_BTN5,  TO(_BASE), KC_BTN3,                               KC_BTN1, KC_BTN2, KC_BTN4, KC_BTN5
+        _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
+        _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
+        _______,     _______,    _______,    _______,    _______,                    _______, _______,    RTT_MSE,  _______,    _______,
+                    KC_BTN4,     KC_BTN5,    _______,   _______,                     KC_BTN1, KC_BTN2,    KC_WH_D,  KC_WH_U
     ),
     [_ARROW]      = LAYOUT(
        KC_NO,        KC_NO,    KC_UP,      KC_NO,   KC_NO,                               KC_PEQL,         KC_P7,          KC_P8,         KC_P9,  KC_DLR,
