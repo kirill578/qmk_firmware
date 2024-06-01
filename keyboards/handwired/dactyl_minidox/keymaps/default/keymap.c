@@ -52,6 +52,13 @@ float leadSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1), Q__NOTE(_C2), Q__NOTE(_C
 #define MIN_UND LT(0, KC_MINS)
 #define SLS_PIP LT(0, KC_SLSH)
 
+
+#define HOME_Z LT(0,KC_Z)
+#define HOME_X LT(0,KC_X)
+#define HOME_C LT(0,KC_C)
+#define HOME_D LT(_MOUSE,KC_D)
+#define HOME_V LT(0,KC_V)
+
 enum custom_keycodes {
     DEPLOYTEST = SAFE_RANGE,
     INVALIATE,
@@ -303,7 +310,28 @@ enum combos {
     QW_ESC,
     CD_LBRC,
     HCOMMA_RBRC,
-    YOU_COMBO
+    YOU_COMBO,
+    EI_ENTER,
+
+    AT_V,
+    HASH_V,
+    DOLLAR_V,
+    PERCENT_V,
+
+    CARET_V,
+    PLUS_V,
+    AST_V,
+    AMP_V,
+
+    // placeholder  here
+    BSLS_V,
+    EQUAL_V,
+    TILD_V,
+
+    UNDS_V,
+    MIN_V,
+    SLSH_V,
+    PIPE_V
 };
 
 const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
@@ -319,6 +347,27 @@ const uint16_t PROGMEM qw_esc[] = {KC_Q, KC_W, COMBO_END};
 const uint16_t PROGMEM cd_lbrc[] = {LT(0,KC_C), LT(_MOUSE,KC_D), COMBO_END};
 const uint16_t PROGMEM hcomma_rbrc[] = {KC_H, KC_COMM, COMBO_END};
 const uint16_t PROGMEM you_combo[] = {KC_Y, KC_U, COMBO_END};
+const uint16_t PROGMEM ei_enter[] = {HOME_E, HOME_I, COMBO_END};
+
+const uint16_t PROGMEM at_v[] = {KC_W, HOME_R, COMBO_END};
+const uint16_t PROGMEM hash_v[] = {KC_F, HOME_S, COMBO_END};
+const uint16_t PROGMEM dollar_v[] = {KC_P, HOME_T, COMBO_END};
+const uint16_t PROGMEM percent_v[] = {KC_B, HOME_G, COMBO_END};
+
+const uint16_t PROGMEM caret_v[] = {KC_J, HOME_M, COMBO_END};
+const uint16_t PROGMEM plus_v[] = {KC_L, HOME_N, COMBO_END};
+const uint16_t PROGMEM ast_v[] = {KC_U, HOME_E, COMBO_END};
+const uint16_t PROGMEM amp_v[] = {KC_Y, HOME_I, COMBO_END};
+
+// placeholder  here
+const uint16_t PROGMEM bsls_v[] = {HOME_S, HOME_C, COMBO_END};
+const uint16_t PROGMEM equal_v[] = {HOME_T, HOME_D, COMBO_END};
+const uint16_t PROGMEM tild_v[] = {HOME_G, HOME_V, COMBO_END};
+
+const uint16_t PROGMEM unds_v[] = {HOME_M, KC_K, COMBO_END};
+const uint16_t PROGMEM min_v[] = {HOME_N, KC_H, COMBO_END};
+const uint16_t PROGMEM slsh_v[] = {HOME_E, KC_COMM, COMBO_END};
+const uint16_t PROGMEM pipe_v[] = {HOME_I, KC_DOT, COMBO_END};
 
 
 combo_t key_combos[] = {
@@ -334,7 +383,28 @@ combo_t key_combos[] = {
     [QW_ESC] = COMBO(qw_esc, KC_ESC),
     [CD_LBRC] = COMBO(cd_lbrc, KC_LBRC),
     [HCOMMA_RBRC] = COMBO(hcomma_rbrc, KC_RBRC),
-    [YOU_COMBO] = COMBO_ACTION(you_combo)
+    [EI_ENTER] = COMBO(ei_enter, KC_ENTER),
+    [YOU_COMBO] = COMBO_ACTION(you_combo),
+
+    [AT_V] =  COMBO(at_v, KC_AT),
+    [HASH_V] =  COMBO(hash_v, KC_HASH),
+    [DOLLAR_V] =  COMBO(dollar_v, KC_DLR),
+    [PERCENT_V] =  COMBO(percent_v, KC_PERC),
+
+    [CARET_V] =  COMBO(caret_v, KC_CIRC),
+    [PLUS_V] =  COMBO(plus_v, KC_PLUS),
+    [AST_V] =  COMBO(ast_v, KC_ASTR),
+    [AMP_V] =  COMBO(amp_v, KC_AMPR),
+
+    // placeholder  here
+    [BSLS_V] =  COMBO(bsls_v, KC_BSLS),
+    [EQUAL_V] =  COMBO(equal_v, KC_EQL),
+    [TILD_V] =  COMBO(tild_v, KC_TILD),
+
+    [UNDS_V] =  COMBO(unds_v, KC_UNDS),
+    [MIN_V] =  COMBO(min_v, KC_MINS),
+    [SLSH_V] =  COMBO(slsh_v, KC_SLSH),
+    [PIPE_V] =  COMBO(pipe_v, KC_PIPE)
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
@@ -379,11 +449,14 @@ void leader_end_user(void) {
         reset_keyboard();
     }
 }
+
+
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
         KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,       KC_U,         KC_Y,         LT(0,KC_QUOT),
       HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,     HOME_E,       HOME_I,                HOME_O,
-  LT(0,KC_Z),  LT(0,KC_X), LT(0,KC_C), LT(_MOUSE,KC_D),         LT(0,KC_V),                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         LT(0,KC_SLSH),
+      HOME_Z,      HOME_X,     HOME_C,          HOME_D,             HOME_V,                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         LT(0,KC_SLSH),
                   KC_LEFT,   KC_RIGHT,          KC_TAB,  LT(_ARROW,KC_SPC),                               KC_BSPC, LT(_SYMBOLS,KC_ENT), LT(0,KC_AMPR),  KC_SCLN
     ),
     [_SYMBOLS] = LAYOUT(
