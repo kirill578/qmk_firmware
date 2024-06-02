@@ -7,11 +7,12 @@
 
 enum layer_names {
     _BASE,
-    _BASE2,
     _SYMBOLS,
     _MOUSE,
     _MOUSE_AUTO,
-    _ARROW
+    _ARROW,
+    _GAME,
+    _GAME2,
 };
 
 float cutSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_C3), Q__NOTE(_C1),);
@@ -501,11 +502,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       HOME_Z,      HOME_X,     HOME_C,          HOME_D,             HOME_V,                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         KC_QUES,
                   KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC, LT(_SYMBOLS,KC_ENT),      KC_DOWN,           KC_UP
     ),
+    [_GAME] = LAYOUT(
+        KC_TAB,        KC_Q,       KC_W,            KC_E,               KC_R,                               KC_Y,    KC_U,       KC_I,       KC_O,       KC_P,
+       KC_LSFT,        KC_A,       KC_S,            KC_D,               KC_F,                               KC_H,    KC_J,       KC_K,       KC_L,    KC_SCLN,
+       KC_LCTL,        KC_Z,       KC_X,            KC_C,               KC_V,                               KC_N,    KC_M,    KC_COMM,     KC_DOT,    KC_SLSH,
+                    KC_LALT,    KC_LGUI,        KC_SPACE,         MO(_GAME2),                            KC_BSPC,  KC_ENT,    KC_DOWN,      KC_UP
+    ),
+    [_GAME2] = LAYOUT(
+        KC_TAB,       KC_F1,      KC_F2,           KC_F3,              KC_F4,                              KC_F5,   KC_F6,      KC_F7,      KC_F8,   KC_F9,
+       KC_LSFT,        KC_1,       KC_2,            KC_3,               KC_4,                               KC_5,    KC_6,       KC_7,       KC_8,    KC_9,
+       KC_LCTL,     KC_TILD,       KC_T,            KC_G,               KC_B,                            _______, _______,    _______,    _______,    _______,
+                    KC_LEFT,   KC_RIGHT,         _______,            _______,                            _______, _______,    _______,    DF(_BASE)
+    ),
     [_SYMBOLS] = LAYOUT(
         PRINT_VID,   KC_F7,    KC_F8,   KC_F9,  KC_F10,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
         PRINT,       KC_F4,    KC_F5,   KC_F6,  KC_F11,                              KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
         PRINT_CP,    KC_F1,    KC_F2,   KC_F3,  KC_F12,                              KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
-                   KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS, KC_DOWN, KC_UP
+                   KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS, KC_DOWN, DF(_GAME)
     ),
     [_MOUSE]      = LAYOUT(
         _______,     _______,    _______,    _______,    _______,                    KC_WH_L,    KC_WH_D,    KC_MS_U,  KC_WH_U,   KC_WH_R,
@@ -526,7 +539,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                     KC_BTN4, KC_BTN5,     KC_TAB,  KC_SPC,                               WR_BSPC, KC_P0, KC_BSLS, KC_PDOT
     )
 };
-
 
 #ifdef PS2_MOUSE_ENABLE
 void ps2_mouse_init_user() {
@@ -567,7 +579,6 @@ void ps2_mouse_init_user() {
 
 }
 #endif
-
 
 // ┌─────────────────────────────────────────────────┐
 // │ d e f i n e   k e y   o v e r r i d e s         │
