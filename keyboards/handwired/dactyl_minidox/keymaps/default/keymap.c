@@ -5,7 +5,6 @@
     #include "ps2.h"
 #endif
 
-#define PRINT LT(0,MEH(KC_F5))
 enum layer_names {
     _BASE,
     _BASE2,
@@ -64,7 +63,11 @@ float leadSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1), Q__NOTE(_C2), Q__NOTE(_C
 enum custom_keycodes {
     DEPLOYTEST = SAFE_RANGE,
     INVALIATE,
-    RTT_MSE
+    RTT_MSE,
+    WR_BSPC,
+    PRINT,
+    PRINT_CP,
+    PRINT_VID,
 };
 // search str
 uint8_t mod_state;
@@ -83,6 +86,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     mod_state = get_mods();
     switch (keycode) {
+        case PRINT:
+            if (record->event.pressed) {
+                tap_code16(useCMD ? S(G(KC_4)) : S(G(KC_S)));
+            }
+            return false;
+        case PRINT_CP:
+            if (record->event.pressed) {
+                tap_code16(useCMD ? S(G(C(KC_4))) : S(G(KC_C)));
+            }
+            return false;
+        case PRINT_VID:
+            if (record->event.pressed) {
+                tap_code16(useCMD ? S(G(KC_5)) : S(G(KC_S)));
+            }
+            return false;
+        case WR_BSPC:
+            if (record->event.pressed) {
+                tap_code16(useCMD ? A(KC_BSPC) : C(KC_BSPC));
+            }
+            return false;
         case KC_BSPC:
             {
             // Initialize a boolean variable that keeps track
@@ -335,7 +358,10 @@ enum combos {
     SLSH_V,
     PIPE_V,
 
-    WORD_BSPC
+    WORD_BSPC,
+
+    RT_TAB,
+    RST_STAB,
 };
 
 const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
@@ -375,6 +401,10 @@ const uint16_t PROGMEM pipe_v[] = {HOME_I, KC_DOT, COMBO_END};
 
 const uint16_t PROGMEM word_bspc[] = {HOME_SPACE, KC_BSPC, COMBO_END};
 
+const uint16_t PROGMEM reset_tab[] = {HOME_R, HOME_T, COMBO_END};
+const uint16_t PROGMEM reset_stab[] = {HOME_R, HOME_S, HOME_T, COMBO_END};
+
+
 combo_t key_combos[] = {
     [TN_CW_TOGGLE] = COMBO(tn_cw_toggle, CW_TOGG),
     [ST_OP] = COMBO(st_op, S(KC_9)),
@@ -411,7 +441,10 @@ combo_t key_combos[] = {
     [SLSH_V] =  COMBO(slsh_v, KC_SLSH),
     [PIPE_V] =  COMBO(pipe_v, KC_PIPE),
 
-    [WORD_BSPC] = COMBO_ACTION(word_bspc)
+    [WORD_BSPC] = COMBO_ACTION(word_bspc),
+
+    [RT_TAB] = COMBO(reset_tab, KC_TAB),
+    [RST_STAB] = COMBO(reset_stab, S(KC_TAB)),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
@@ -480,13 +513,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,       KC_U,         KC_Y,   LT(0,KC_QUOT),
       HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,     HOME_E,       HOME_I,          HOME_O,
       HOME_Z,      HOME_X,     HOME_C,          HOME_D,             HOME_V,                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         KC_QUES,
-                  KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC, LT(_SYMBOLS,KC_ENT), LT(0,KC_AMPR),  KC_SCLN
+                  KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC, LT(_SYMBOLS,KC_ENT),      KC_DOWN,           KC_UP
     ),
     [_SYMBOLS] = LAYOUT(
-        KC_CIRC,     KC_F7,    KC_F8,   KC_F9,  KC_F10,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
-        KC_AT,       KC_F4,    KC_F5,   KC_F6,  KC_F11,                              KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
-        KC_HASH,     KC_F1,    KC_F2,   KC_F3,  KC_F12,                              KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
-                   KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS, KC_LPRN, KC_RPRN
+        PRINT_VID,   KC_F7,    KC_F8,   KC_F9,  KC_F10,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
+        PRINT,       KC_F4,    KC_F5,   KC_F6,  KC_F11,                              KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
+        PRINT_CP,    KC_F1,    KC_F2,   KC_F3,  KC_F12,                              KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
+                   KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS, KC_DOWN, KC_UP
     ),
     [_MOUSE]      = LAYOUT(
         _______,     _______,    _______,    _______,    _______,                    KC_WH_L,    KC_WH_D,    KC_MS_U,  KC_WH_U,   KC_WH_R,
@@ -504,7 +537,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_NO,        KC_NO,    KC_UP,      KC_NO,   KC_NO,                               KC_PEQL,         KC_P7,          KC_P8,         KC_P9,  KC_DLR,
      KC_HOME,      KC_LEFT,  KC_DOWN,    KC_RGHT,  KC_END,                               KC_PPLS,  RSFT_T(KC_P4),  RGUI_T(KC_P5), LALT_T(KC_P6), KC_PERC,
         KC_Z,   KC_MS_BTN4,     KC_C, KC_MS_BTN5,    KC_V,                               KC_ASTR,         KC_P1,          KC_P2,         KC_P3,  KC_PEQL,
-                    KC_BTN4, KC_BTN5,     KC_TAB,  KC_SPC,                               KC_TRNS, KC_P0, KC_BSLS, KC_PDOT
+                    KC_BTN4, KC_BTN5,     KC_TAB,  KC_SPC,                               WR_BSPC, KC_P0, KC_BSLS, KC_PDOT
     )
 };
 
