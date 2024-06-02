@@ -280,20 +280,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
-        case KC_P0:
-        case KC_P1:
-        case KC_P2:
-        case KC_P3:
-        case RSFT_T(KC_P4):
-        case RGUI_T(KC_P5):
-        case LALT_T(KC_P6):
-        case KC_P7:
-        case KC_P8:
-        case KC_P9:
-            if (!host_keyboard_led_state().num_lock && !useCMD) {
-                tap_code(KC_NUM_LOCK);
-            }
-            return true;
     }
     return true;
 }
@@ -534,9 +520,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                     KC_BTN4,     KC_BTN5,    _______,   _______,                     KC_BTN1, KC_BTN2,    KC_WH_D,  KC_WH_U
     ),
     [_ARROW]      = LAYOUT(
-       KC_NO,        KC_NO,    KC_UP,      KC_NO,   KC_NO,                               KC_PEQL,         KC_P7,          KC_P8,         KC_P9,  KC_DLR,
-     KC_HOME,      KC_LEFT,  KC_DOWN,    KC_RGHT,  KC_END,                               KC_PPLS,  RSFT_T(KC_P4),  RGUI_T(KC_P5), LALT_T(KC_P6), KC_PERC,
-        KC_Z,   KC_MS_BTN4,     KC_C, KC_MS_BTN5,    KC_V,                               KC_ASTR,         KC_P1,          KC_P2,         KC_P3,  KC_PEQL,
+       KC_NO,        KC_NO,    KC_UP,      KC_NO,   KC_NO,                               KC_PEQL,         KC_7,          KC_8,         KC_9,  KC_DLR,
+     KC_HOME,      KC_LEFT,  KC_DOWN,    KC_RGHT,  KC_END,                               KC_PPLS,  RSFT_T(KC_4),  RGUI_T(KC_5), LALT_T(KC_6), KC_PERC,
+        KC_Z,   KC_MS_BTN4,     KC_C, KC_MS_BTN5,    KC_V,                               KC_ASTR,         KC_1,          KC_2,         KC_3,  KC_PEQL,
                     KC_BTN4, KC_BTN5,     KC_TAB,  KC_SPC,                               WR_BSPC, KC_P0, KC_BSLS, KC_PDOT
     )
 };
