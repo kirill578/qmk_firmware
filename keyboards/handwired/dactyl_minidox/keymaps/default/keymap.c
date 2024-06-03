@@ -335,7 +335,7 @@ enum combos {
     FP_OC,
     LU_CC,
     COMMA_DOT_MINUS,
-    QW_ESC,
+    WF_ESC,
     CD_LBRC,
     HCOMMA_RBRC,
     YOU_COMBO,
@@ -376,7 +376,7 @@ const uint16_t PROGMEM _46_del[] = {RSFT_T(KC_P4), LALT_T(KC_P6), COMBO_END};
 const uint16_t PROGMEM fp_oc[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM lu_cc[] = {KC_L, KC_U, COMBO_END};
 const uint16_t PROGMEM comma_dot_minus[] = {KC_COMM, KC_DOT, COMBO_END};
-const uint16_t PROGMEM qw_esc[] = {KC_Q, KC_W, COMBO_END};
+const uint16_t PROGMEM wf_esc[] = {KC_W, KC_F, COMBO_END};
 const uint16_t PROGMEM cd_lbrc[] = {LT(0,KC_C), LT(_MOUSE,KC_D), COMBO_END};
 const uint16_t PROGMEM hcomma_rbrc[] = {KC_H, KC_COMM, COMBO_END};
 const uint16_t PROGMEM you_combo[] = {KC_Y, KC_U, COMBO_END};
@@ -418,7 +418,7 @@ combo_t key_combos[] = {
     [FP_OC] = COMBO(fp_oc, KC_LCBR),
     [LU_CC] = COMBO(lu_cc, KC_RCBR),
     [COMMA_DOT_MINUS] = COMBO(comma_dot_minus, KC_MINS),
-    [QW_ESC] = COMBO(qw_esc, KC_ESC),
+    [WF_ESC] = COMBO(wf_esc, KC_ESC),
     [CD_LBRC] = COMBO(cd_lbrc, KC_LBRC),
     [HCOMMA_RBRC] = COMBO(hcomma_rbrc, KC_RBRC),
     [EI_ENTER] = COMBO(ei_enter, KC_ENTER),
@@ -453,7 +453,7 @@ combo_t key_combos[] = {
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
     switch (get_highest_layer(default_layer_state)) {
         case _GAME:
-            if (combo_index == QW_ESC) {
+            if (combo_index == WF_ESC) {
                 return true;
             }
             return false;
