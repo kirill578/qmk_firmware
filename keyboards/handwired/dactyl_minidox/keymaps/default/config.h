@@ -15,6 +15,7 @@
 //#define	SPLIT_HAND_PIN_LOW_IS_LEFT // seems flaky going with eproom for now
 
 #define COMBO_ONLY_FROM_LAYER 0
+#define COMBO_SHOULD_TRIGGER
 
 #define PS2_MOUSE_USE_REMOTE_MODE
 

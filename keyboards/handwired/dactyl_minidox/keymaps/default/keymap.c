@@ -15,13 +15,14 @@ enum layer_names {
     _GAME2,
 };
 
+#ifdef AUDIO_ENABLE
 float cutSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_C3), Q__NOTE(_C1),);
 float copySound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_B3),);
 float pasteSound[][2] = SONG(Q__NOTE(_B3),);
 float undoSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_A3),);
 
 float leadSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1), Q__NOTE(_C2), Q__NOTE(_C4),);
-
+#endif //AUDIO_ENABLE
 
 // mods
 #define      O_GUI    OSM(MOD_LGUI)
@@ -434,6 +435,17 @@ combo_t key_combos[] = {
     [RST_STAB] = COMBO(reset_stab, S(KC_TAB)),
 };
 
+bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
+    switch (get_highest_layer(default_layer_state)) {
+        case _GAME:
+            if (combo_index == QW_ESC) {
+                return true;
+            }
+            return false;
+    }
+    return true;
+}
+
 void process_combo_event(uint16_t combo_index, bool pressed) {
   bool useCMD = false;
   switch (detected_host_os()) {
@@ -502,18 +514,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       HOME_Z,      HOME_X,     HOME_C,          HOME_D,             HOME_V,                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         KC_QUES,
                   KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC, LT(_SYMBOLS,KC_ENT),      KC_DOWN,           KC_UP
     ),
-    [_GAME] = LAYOUT(
-        KC_TAB,        KC_Q,       KC_W,            KC_E,               KC_R,                               KC_Y,    KC_U,       KC_I,       KC_O,       KC_P,
-       KC_LSFT,        KC_A,       KC_S,            KC_D,               KC_F,                               KC_H,    KC_J,       KC_K,       KC_L,    KC_SCLN,
-       KC_LCTL,        KC_Z,       KC_X,            KC_C,               KC_V,                               KC_N,    KC_M,    KC_COMM,     KC_DOT,    KC_SLSH,
-                    KC_LALT,    KC_LGUI,        KC_SPACE,         MO(_GAME2),                            KC_BSPC,  KC_ENT,    KC_DOWN,      KC_UP
-    ),
-    [_GAME2] = LAYOUT(
-        KC_TAB,       KC_F1,      KC_F2,           KC_F3,              KC_F4,                              KC_F5,   KC_F6,      KC_F7,      KC_F8,   KC_F9,
-       KC_LSFT,        KC_1,       KC_2,            KC_3,               KC_4,                               KC_5,    KC_6,       KC_7,       KC_8,    KC_9,
-       KC_LCTL,     KC_TILD,       KC_T,            KC_G,               KC_B,                            _______, _______,    _______,    _______,    _______,
-                    KC_LEFT,   KC_RIGHT,         _______,            _______,                            _______, _______,    _______,    DF(_BASE)
-    ),
     [_SYMBOLS] = LAYOUT(
         PRINT_VID,   KC_F7,    KC_F8,   KC_F9,  KC_F10,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
         PRINT,       KC_F4,    KC_F5,   KC_F6,  KC_F11,                              KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
@@ -537,7 +537,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_HOME,      KC_LEFT,  KC_DOWN,    KC_RGHT,  KC_END,                               KC_PPLS,  RSFT_T(KC_4),  RGUI_T(KC_5), LALT_T(KC_6), KC_PERC,
         KC_Z,   KC_MS_BTN4,     KC_C, KC_MS_BTN5,    KC_V,                               KC_ASTR,         KC_1,          KC_2,         KC_3,  KC_PEQL,
                     KC_BTN4, KC_BTN5,     KC_TAB,  KC_SPC,                               WR_BSPC, KC_P0, KC_BSLS, KC_PDOT
-    )
+    ),
+    [_GAME] = LAYOUT(
+        KC_TAB,        KC_Q,       KC_W,            KC_E,               KC_R,                               KC_Y,    KC_U,       KC_I,       KC_O,       KC_P,
+       KC_LSFT,        KC_A,       KC_S,            KC_D,               KC_F,                               KC_H,    KC_J,       KC_K,       KC_L,    KC_SCLN,
+       KC_LCTL,        KC_Z,       KC_X,            KC_C,               KC_V,                               KC_N,    KC_M,    KC_COMM,     KC_DOT,    KC_SLSH,
+                    KC_LALT,    KC_LGUI,        KC_SPACE,         MO(_GAME2),                            KC_BSPC,  KC_ENT,    KC_DOWN,      KC_UP
+    ),
+    [_GAME2] = LAYOUT(
+        KC_TAB,       KC_F1,      KC_F2,           KC_F3,              KC_F4,                              KC_F5,   KC_F6,      KC_F7,      KC_F8,   KC_F9,
+       KC_LSFT,        KC_1,       KC_2,            KC_3,               KC_4,                               KC_5,    KC_6,       KC_7,       KC_8,    KC_9,
+       KC_LCTL,     KC_TILD,       KC_T,            KC_G,               KC_B,                            _______, _______,    _______,    _______,    _______,
+                    KC_LEFT,   KC_RIGHT,         _______,            _______,                            _______, _______,    _______,    DF(_BASE)
+    ),
 };
 
 #ifdef PS2_MOUSE_ENABLE
