@@ -70,6 +70,7 @@ enum custom_keycodes {
     PRINT,
     PRINT_CP,
     PRINT_VID,
+    LT_SYM_OSM_MEH
 };
 // search str
 uint8_t mod_state;
@@ -88,6 +89,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     mod_state = get_mods();
     switch (keycode) {
+        case LT_SYM_OSM_MEH: {
+            static uint16_t key_timer;
+            if (record->event.pressed) {
+                key_timer = timer_read();
+                layer_on(_SYMBOLS);
+            } else {
+                layer_off(_SYMBOLS);
+                if (timer_elapsed(key_timer) < TAPPING_TERM) {
+                    add_weak_mods(MOD_MEH);
+                    set_oneshot_mods(MOD_MEH);
+                }
+            }
+            return false; // Skip all further processing of this key
+        }
         case PRINT:
             if (record->event.pressed) {
                 tap_code16(useCMD ? S(G(KC_4)) : S(G(KC_S)));
@@ -512,7 +527,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Q,        KC_W,       KC_F,            KC_P,               KC_B,                               KC_J,    KC_L,       KC_U,         KC_Y,   LT(0,KC_QUOT),
       HOME_A,      HOME_R,     HOME_S,          HOME_T,             HOME_G,                             HOME_M,  HOME_N,     HOME_E,       HOME_I,          HOME_O,
       HOME_Z,      HOME_X,     HOME_C,          HOME_D,             HOME_V,                               KC_K,    KC_H,    KC_COMM,       KC_DOT,         KC_QUES,
-                  KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC, LT(_SYMBOLS,KC_ENT),      KC_DOWN,           KC_UP
+                  KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC,  LT_SYM_OSM_MEH,      KC_DOWN,           KC_UP
     ),
     [_SYMBOLS] = LAYOUT(
         PRINT_VID,   KC_F7,    KC_F8,   KC_F9,  KC_F10,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
