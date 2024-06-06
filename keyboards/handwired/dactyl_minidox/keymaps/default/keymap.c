@@ -22,6 +22,8 @@ float pasteSound[][2] = SONG(Q__NOTE(_B3),);
 float undoSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_A3),);
 
 float leadSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1), Q__NOTE(_C2), Q__NOTE(_C4),);
+float mehSound[][2] = SONG(Q__NOTE(_C3));
+float mehOffSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1),);
 #endif //AUDIO_ENABLE
 
 // mods
@@ -97,8 +99,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 layer_off(_SYMBOLS);
                 if (timer_elapsed(key_timer) < TAPPING_TERM) {
-                    add_weak_mods(MOD_MEH);
-                    set_oneshot_mods(MOD_MEH);
+                    if (!get_oneshot_mods()) {
+                        #ifdef AUDIO_ENABLE
+                            PLAY_SONG(mehSound);
+                        #endif //AUDIO_ENABLE
+                        add_weak_mods(MOD_MEH);
+                        set_oneshot_mods(MOD_MEH);
+                    } else {
+                        #ifdef AUDIO_ENABLE
+                            PLAY_SONG(mehOffSound);
+                        #endif //AUDIO_ENABLE
+                        clear_oneshot_mods();
+                    }
                 }
             }
             return false; // Skip all further processing of this key
