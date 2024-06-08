@@ -10,6 +10,7 @@ enum layer_names {
     _SYMBOLS,
     _MOUSE,
     _MOUSE_AUTO,
+    _MOUSE_AUTO2,
     _ARROW,
     _GAME,
     _GAME2,
@@ -72,23 +73,19 @@ enum custom_keycodes {
     PRINT,
     PRINT_CP,
     PRINT_VID,
-    LT_SYM_OSM_MEH
+    LT_SYM_OSM_MEH,
+    DRAG_SCROLL
 };
+
+bool set_scrolling = false;
+
 // search str
 uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    bool useCMD = false;
-    switch (detected_host_os()) {
-      case OS_UNSURE:
-        useCMD = true;
-        break;
-      case OS_MACOS:
-      case OS_IOS:
-        useCMD = true;
-        break;
-      default:
-        break;
+    if (keycode == DRAG_SCROLL && record->event.pressed) {
+        set_scrolling = !set_scrolling;
     }
+    bool useCMD = detected_host_os() == OS_MACOS;
     mod_state = get_mods();
     switch (keycode) {
         case LT_SYM_OSM_MEH: {
@@ -342,7 +339,6 @@ enum combos {
     ST_OP,
     NE_CP,
     NI_DEL,
-    GM_LEAD,
     _46_DEL,
     FP_OC,
     LU_CC,
@@ -383,7 +379,6 @@ const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
 const uint16_t PROGMEM st_op[] = {HOME_S, HOME_T, COMBO_END};
 const uint16_t PROGMEM ne_cp[] = {HOME_N, HOME_E, COMBO_END};
 const uint16_t PROGMEM ni_del[] = {HOME_N, HOME_I, COMBO_END};
-const uint16_t PROGMEM gm_lead[] = {HOME_G, HOME_M, COMBO_END};
 const uint16_t PROGMEM _46_del[] = {RSFT_T(KC_P4), LALT_T(KC_P6), COMBO_END};
 const uint16_t PROGMEM fp_oc[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM lu_cc[] = {KC_L, KC_U, COMBO_END};
@@ -425,7 +420,6 @@ combo_t key_combos[] = {
     [ST_OP] = COMBO(st_op, S(KC_9)),
     [NE_CP] = COMBO(ne_cp, S(KC_0)),
     [NI_DEL] = COMBO(ni_del, KC_DEL),
-    [GM_LEAD] = COMBO(gm_lead, QK_LEAD),
     [_46_DEL] = COMBO(_46_del, KC_DEL),
     [FP_OC] = COMBO(fp_oc, KC_LCBR),
     [LU_CC] = COMBO(lu_cc, KC_RCBR),
@@ -474,18 +468,7 @@ bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode
 }
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
-  bool useCMD = false;
-  switch (detected_host_os()) {
-      case OS_UNSURE:
-        useCMD = true;
-        break;
-      case OS_MACOS:
-      case OS_IOS:
-        useCMD = true;
-        break;
-      default:
-        break;
-  }
+  bool useCMD = detected_host_os() == OS_MACOS;
   mod_state = get_mods();
   switch(combo_index) {
     case YOU_COMBO:
@@ -504,35 +487,6 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
   }
 }
 
-void leader_start_user(void) {
-    #ifdef AUDIO_ENABLE
-        PLAY_SONG(leadSound);
-    #endif //AUDIO_ENABLE
-}
-
-void leader_end_user(void) {
-    if (leader_sequence_two_keys(KC_A, KC_F)) {
-        SEND_STRING("() => {}");
-        tap_code16(KC_LEFT);
-        tap_code16(KC_ENTER);
-        tap_code16(KC_TAB);
-    } else if (leader_sequence_two_keys(KC_F, KC_N)) {
-        SEND_STRING("function() {}");
-        tap_code16(KC_LEFT);
-        tap_code16(KC_ENTER);
-        tap_code16(KC_TAB);
-    } else if (leader_sequence_four_keys(KC_D, KC_E, KC_P, KC_L)) {
-        SEND_STRING("yarn build:test && yarn deploy:test\n");
-    } else if (leader_sequence_four_keys(KC_I, KC_N, KC_V, KC_A)) {
-        SEND_STRING("yarn invalidate-cache:test\n");
-    } else if (leader_sequence_four_keys(KC_S, KC_C, KC_A, KC_P)) {
-        tap_code16(G(S(KC_4)));
-    } else if (leader_sequence_four_keys(KC_B, KC_O, KC_O, KC_T)) {
-        reset_keyboard();
-    }
-}
-
-
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
@@ -550,14 +504,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MOUSE]      = LAYOUT(
         _______,     _______,    _______,    _______,    _______,                    KC_WH_L,    KC_WH_D,    KC_MS_U,  KC_WH_U,   KC_WH_R,
         _______,     _______,    _______,    _______,    _______,                    _______,    KC_MS_L,    KC_MS_D,  KC_MS_R,    KC_F12,
-        _______,     KC_ACL2,    KC_ACL0,    KC_TRNS,    _______,                    _______,    _______,    RTT_MSE,   _______,  _______,
-                     KC_BTN4,     KC_BTN5,   _______,   KC_BTN3,                     KC_BTN1,    KC_BTN2,    KC_WH_D,  KC_WH_U
+        _______,     KC_ACL2,    KC_ACL0,    KC_TRNS,    KC_BTN3,                    _______,    _______,    RTT_MSE,  _______,   _______,
+                     KC_BTN4,    KC_BTN5,    KC_BTN2,    KC_BTN1,                    KC_BTN1,    KC_BTN2,    KC_WH_D,  KC_WH_U
     ),
     [_MOUSE_AUTO]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
         _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
         _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
-        _______,     _______,    _______,    _______,    _______,                    _______, _______,    RTT_MSE,  _______,    _______,
-                    KC_BTN4,     KC_BTN5,    _______,   _______,                     KC_BTN1, KC_BTN2,    KC_WH_D,  KC_WH_U
+        _______,     _______,    _______,    _______,    KC_BTN3,                    _______, _______,    RTT_MSE,  _______,    _______,
+                    KC_BTN4,     KC_BTN5,    KC_BTN2,    KC_BTN1,                    KC_BTN1, KC_BTN2,    KC_WH_D,  KC_WH_U
+    ),
+    [_MOUSE_AUTO2]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
+        _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
+        _______,     _______,    _______,    _______,    DRAG_SCROLL,                _______, _______,    _______,  _______,    _______,
+        _______,     _______,    _______,    _______,    KC_BTN3,                    _______, _______,    RTT_MSE,  _______,    _______,
+                    KC_BTN4,     KC_BTN5,    KC_BTN2,    KC_BTN1,                    KC_BTN1, KC_BTN2,    KC_WH_D,  KC_WH_U
     ),
     [_ARROW]      = LAYOUT(
        KC_NO,        KC_NO,    KC_UP,      KC_NO,   KC_NO,                               KC_PEQL,         KC_7,          KC_8,         KC_9,  KC_DLR,
@@ -671,3 +631,43 @@ const key_override_t **key_overrides = (const key_override_t *[]){
   &gt_override,
   NULL // Null terminate the array of overrides!
 };
+
+// in keymap.c:
+void pointing_device_init_user(void) {
+    set_auto_mouse_layer(_MOUSE_AUTO2); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
+    set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+}
+
+// Modify these values to adjust the scrolling speed
+#define SCROLL_DIVISOR_H 64.0
+#define SCROLL_DIVISOR_V 64.0
+
+// Variables to store accumulated scroll values
+float scroll_accumulated_h = 0;
+float scroll_accumulated_v = 0;
+
+// Function to handle mouse reports and perform drag scrolling
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    // Check if drag scrolling is active
+    if (set_scrolling) {
+        // Calculate and accumulate scroll values based on mouse movement and divisors
+        scroll_accumulated_h += (float)mouse_report.x / SCROLL_DIVISOR_H;
+        scroll_accumulated_v += (float)mouse_report.y / SCROLL_DIVISOR_V;
+
+        // Assign integer parts of accumulated scroll values to the mouse report
+        mouse_report.h = (int8_t)scroll_accumulated_h;
+        mouse_report.v = (int8_t)scroll_accumulated_v;
+
+        // Update accumulated scroll values by subtracting the integer parts
+        scroll_accumulated_h -= (int8_t)scroll_accumulated_h;
+        scroll_accumulated_v -= (int8_t)scroll_accumulated_v;
+
+        // Clear the X and Y values of the mouse report
+        mouse_report.x = 0;
+        mouse_report.y = 0;
+    } else {
+        mouse_report.x *= 1;
+        mouse_report.y *= 1;
+    }
+    return mouse_report;
+}
