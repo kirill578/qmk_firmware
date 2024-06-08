@@ -496,10 +496,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                   KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC,  LT_SYM_OSM_MEH,      KC_DOWN,           KC_UP
     ),
     [_SYMBOLS] = LAYOUT(
-        PRINT_VID,   KC_F7,    KC_F8,   KC_F9,  KC_F10,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT,
-        PRINT,       KC_F4,    KC_F5,   KC_F6,  KC_F11,                              KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
-        PRINT_CP,    KC_F1,    KC_F2,   KC_F3,  KC_F12,                              KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,
-                   KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS, KC_DOWN, DF(_GAME)
+        PRINT_VID,   KC_F7,    KC_F8,   KC_F9,  KC_F10,                              _______, _______,    _______,  _______,    _______,
+        PRINT,       KC_F4,    KC_F5,   KC_F6,  KC_F11,                              _______, _______,    _______,  _______,    _______,
+        PRINT_CP,    KC_F1,    KC_F2,   KC_F3,  KC_F12,                              _______, _______,    _______,  _______,    _______,
+                   KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS,    QK_BOOT, DF(_GAME)
     ),
     [_MOUSE]      = LAYOUT(
         _______,     _______,    _______,    _______,    _______,                    KC_WH_L,    KC_WH_D,    KC_MS_U,  KC_WH_U,   KC_WH_R,
@@ -650,24 +650,39 @@ float scroll_accumulated_v = 0;
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     // Check if drag scrolling is active
     if (set_scrolling) {
-        // Calculate and accumulate scroll values based on mouse movement and divisors
-        scroll_accumulated_h += (float)mouse_report.x / SCROLL_DIVISOR_H;
-        scroll_accumulated_v += (float)mouse_report.y / SCROLL_DIVISOR_V;
+        // Calculate the angle of the vector
+        int abs_x = abs(mouse_report.x);
+        int abs_y = abs(mouse_report.y);
 
-        // Assign integer parts of accumulated scroll values to the mouse report
-        mouse_report.h = (int8_t)scroll_accumulated_h;
-        mouse_report.v = (int8_t)scroll_accumulated_v;
+        // Determine if the movement is primarily horizontal or vertical
+        if (abs_x > abs_y) {
+            // Horizontal movements
+            if (mouse_report.x > 5) {
+                tap_code16(KC_RIGHT);
+            } else if (mouse_report.x < -5) {
+                tap_code16(KC_LEFT);
+            }
+        } else {
+            // Vertical movements
+            if (mouse_report.y > 5) {
+                tap_code16(KC_DOWN);
+            } else if (mouse_report.y < -5) {
+                tap_code16(KC_UP);
+            }
+        }
 
-        // Update accumulated scroll values by subtracting the integer parts
-        scroll_accumulated_h -= (int8_t)scroll_accumulated_h;
-        scroll_accumulated_v -= (int8_t)scroll_accumulated_v;
+        // Reset the horizontal and vertical scroll values
+        mouse_report.h = 0;
+        mouse_report.v = 0;
 
         // Clear the X and Y values of the mouse report
         mouse_report.x = 0;
         mouse_report.y = 0;
     } else {
+        // If scrolling is not active, proceed normally.
         mouse_report.x *= 1;
         mouse_report.y *= 1;
     }
     return mouse_report;
 }
+
