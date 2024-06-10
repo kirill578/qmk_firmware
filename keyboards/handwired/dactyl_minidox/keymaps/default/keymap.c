@@ -549,7 +549,7 @@ void ps2_mouse_init_user() {
     PS2_MOUSE_SEND(0xE2, "tpsens: 0xE2");
     PS2_MOUSE_SEND(0x81, "tpsens: 0x81");
     PS2_MOUSE_SEND(0x4A, "tpsens: 0x4A");
-    PS2_MOUSE_SEND(0x49, "tpsens: 0x68");
+    PS2_MOUSE_SEND(0x49, "tpsens: 0xFF");
 
     // set TrackPoint Negative Inertia factor
     PS2_MOUSE_SEND(0xE2, "tpnegin: 0xE2");
@@ -562,7 +562,7 @@ void ps2_mouse_init_user() {
     PS2_MOUSE_SEND(0xE2, "tpsp: 0xE2");
     PS2_MOUSE_SEND(0x81, "tpsp: 0x81");
     PS2_MOUSE_SEND(0x60, "tpsp: 0x60");
-    PS2_MOUSE_SEND(0x61, "tpsp: 0xAA");
+    PS2_MOUSE_SEND(0x61, "tpsp: 0xFF");
 
     // inquire pts status
     rcv = ps2_host_send(0xE2);
