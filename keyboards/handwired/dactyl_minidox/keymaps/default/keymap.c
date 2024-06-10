@@ -324,7 +324,6 @@ void ps2_mouse_moved_user(report_mouse_t *mouse_report) { // Whenever the TrackP
 
     }
 }
-
 void matrix_scan_user(void) {  // ALWAYS RUNNING VOID FUNCTION, CAN BE USED TO CHECK CLOCK RUNTIMES OVER THE DURATION THAT THE KEYBOARD IS POWERED ON
   if (trackpoint_timer && (timer_elapsed(trackpoint_timer) > 750)) { //If the time of both the TP timer
     if (!tp_buttons) {
@@ -634,8 +633,17 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 
 // in keymap.c:
 void pointing_device_init_user(void) {
-    set_auto_mouse_layer(_MOUSE_AUTO2); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
-    set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+    //set_auto_mouse_layer(_MOUSE_AUTO2); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
+    //set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (get_highest_layer(state) != _ARROW) {
+        set_scrolling = false;
+    } else {
+        set_scrolling = true;
+    }
+    return state;
 }
 
 // Modify these values to adjust the scrolling speed
@@ -648,6 +656,10 @@ float scroll_accumulated_v = 0;
 
 // Function to handle mouse reports and perform drag scrolling
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+
+
+
+
     // Check if drag scrolling is active
     if (set_scrolling) {
         // Calculate the angle of the vector
@@ -679,10 +691,23 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
         mouse_report.x = 0;
         mouse_report.y = 0;
     } else {
+        if (mouse_report.x && mouse_report.y) {
+            if (trackpoint_timer) {
+                trackpoint_timer = timer_read();
+            } else {
+                if (!tp_buttons) { //I'm still a bit confused about this one, but I believe it checks that if the mousekey state isn't set, turn on this layer specified?
+                    layer_on(_MOUSE_AUTO);
+                    trackpoint_timer = timer_read();
+                }
+
+            }
+        }
+
         // If scrolling is not active, proceed normally.
         mouse_report.x *= 1;
         mouse_report.y *= 1;
     }
     return mouse_report;
 }
+
 
