@@ -10,7 +10,6 @@ enum layer_names {
     _SYMBOLS,
     _MOUSE,
     _MOUSE_AUTO,
-    _MOUSE_AUTO2,
     _ARROW,
     _GAME,
     _GAME2,
@@ -77,13 +76,17 @@ enum custom_keycodes {
     DRAG_SCROLL
 };
 
+bool set_arrows = false;
 bool set_scrolling = false;
 
 // search str
 uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (keycode == DRAG_SCROLL && record->event.pressed) {
-        set_scrolling = !set_scrolling;
+        set_scrolling = true;
+    }
+        if (keycode == DRAG_SCROLL && !record->event.pressed) {
+        set_scrolling = false;
     }
     bool useCMD = detected_host_os() == OS_MACOS;
     mod_state = get_mods();
@@ -495,10 +498,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                   KC_LEFT,   KC_RIGHT,          KC_TAB,         HOME_SPACE,                            KC_BSPC,  LT_SYM_OSM_MEH,      KC_DOWN,           KC_UP
     ),
     [_SYMBOLS] = LAYOUT(
-        PRINT_VID,   KC_F7,    KC_F8,   KC_F9,  KC_F10,                              _______, _______,    _______,  _______,    _______,
+        PRINT_VID,   KC_F7,    KC_F8,   KC_F9,  KC_F10,                              _______,  KC_F16,     KC_F17,   KC_F18,    _______,
         PRINT,       KC_F4,    KC_F5,   KC_F6,  KC_F11,                              _______, _______,    _______,  _______,    _______,
-        PRINT_CP,    KC_F1,    KC_F2,   KC_F3,  KC_F12,                              _______, _______,    _______,  _______,    _______,
-                   KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS,    QK_BOOT, DF(_GAME)
+        PRINT_CP,    KC_F1,    KC_F2,   KC_F3,  KC_F12,                               KC_F19,  C(KC_F16),    C(KC_F17),   C(KC_F18),    _______,
+                   KC_BTN4,  KC_BTN5,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS,    QK_BOOT, DF(_GAME)
     ),
     [_MOUSE]      = LAYOUT(
         _______,     _______,    _______,    _______,    _______,                    KC_WH_L,    KC_WH_D,    KC_MS_U,  KC_WH_U,   KC_WH_R,
@@ -508,13 +511,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_MOUSE_AUTO]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
         _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
-        _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
-        _______,     _______,    _______,    _______,    KC_BTN3,                    _______, _______,    RTT_MSE,  _______,    _______,
-                    KC_BTN4,     KC_BTN5,    KC_BTN2,    KC_BTN1,                    KC_BTN1, KC_BTN2,    KC_WH_D,  KC_WH_U
-    ),
-    [_MOUSE_AUTO2]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
-        _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
-        _______,     _______,    _______,    _______,    DRAG_SCROLL,                _______, _______,    _______,  _______,    _______,
+        _______,     _______,    _______,    _______,    _______,                DRAG_SCROLL, _______,    _______,  _______,    _______,
         _______,     _______,    _______,    _______,    KC_BTN3,                    _______, _______,    RTT_MSE,  _______,    _______,
                     KC_BTN4,     KC_BTN5,    KC_BTN2,    KC_BTN1,                    KC_BTN1, KC_BTN2,    KC_WH_D,  KC_WH_U
     ),
@@ -631,24 +628,19 @@ const key_override_t **key_overrides = (const key_override_t *[]){
   NULL // Null terminate the array of overrides!
 };
 
-// in keymap.c:
-void pointing_device_init_user(void) {
-    //set_auto_mouse_layer(_MOUSE_AUTO2); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
-    //set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
-}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     if (get_highest_layer(state) != _ARROW) {
-        set_scrolling = false;
+        set_arrows = false;
     } else {
-        set_scrolling = true;
+        set_arrows = true;
     }
     return state;
 }
 
 // Modify these values to adjust the scrolling speed
 #define SCROLL_DIVISOR_H 64.0
-#define SCROLL_DIVISOR_V 64.0
+#define SCROLL_DIVISOR_V 32.0
 
 // Variables to store accumulated scroll values
 float scroll_accumulated_h = 0;
@@ -657,11 +649,25 @@ float scroll_accumulated_v = 0;
 // Function to handle mouse reports and perform drag scrolling
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
 
+    if (set_scrolling) {
+// Calculate and accumulate scroll values based on mouse movement and divisors
+        scroll_accumulated_h += (float)mouse_report.x / SCROLL_DIVISOR_H;
+        scroll_accumulated_v += (float)mouse_report.y / SCROLL_DIVISOR_V;
 
+        // Assign integer parts of accumulated scroll values to the mouse report
+        mouse_report.h = -(int8_t)scroll_accumulated_h;
+        mouse_report.v = -(int8_t)scroll_accumulated_v;
 
+        // Update accumulated scroll values by subtracting the integer parts
+        scroll_accumulated_h -= (int8_t)scroll_accumulated_h;
+        scroll_accumulated_v -= (int8_t)scroll_accumulated_v;
+
+        // Clear the X and Y values of the mouse report
+        mouse_report.x = 0;
+        mouse_report.y = 0;
 
     // Check if drag scrolling is active
-    if (set_scrolling) {
+    } else if (set_arrows) {
         // Calculate the angle of the vector
         int abs_x = abs(mouse_report.x);
         int abs_y = abs(mouse_report.y);
@@ -691,7 +697,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
         mouse_report.x = 0;
         mouse_report.y = 0;
     } else {
-        if (mouse_report.x && mouse_report.y) {
+        if (mouse_report.x || mouse_report.y) {
             if (trackpoint_timer) {
                 trackpoint_timer = timer_read();
             } else {
@@ -704,8 +710,8 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
         }
 
         // If scrolling is not active, proceed normally.
-        mouse_report.x *= 1;
-        mouse_report.y *= 1;
+        mouse_report.x *= 0.7;
+        mouse_report.y *= 0.7;
     }
     return mouse_report;
 }
