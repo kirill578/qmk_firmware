@@ -511,7 +511,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_MOUSE_AUTO]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
         _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
-        _______,     _______,    _______,    _______,    _______,                DRAG_SCROLL, _______,    _______,  _______,    _______,
+        _______,     _______,    _______,    DRAG_SCROLL,    _______,                DRAG_SCROLL, _______,    _______,  _______,    _______,
         _______,     _______,    _______,    _______,    KC_BTN3,                    _______, _______,    RTT_MSE,  _______,    _______,
                     KC_BTN4,     KC_BTN5,    KC_BTN2,    KC_BTN1,                    KC_BTN1, KC_BTN2,    KC_WH_D,  KC_WH_U
     ),
@@ -712,6 +712,12 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
         // If scrolling is not active, proceed normally.
         mouse_report.x *= 0.7;
         mouse_report.y *= 0.7;
+
+        // check if _MOUSE
+        if (IS_LAYER_ON(_MOUSE)) {
+            mouse_report.x *= 2;
+            mouse_report.y *= 2;
+        }
     }
     return mouse_report;
 }
