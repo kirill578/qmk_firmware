@@ -103,5 +103,11 @@
 #define POINTING_DEVICE_ROTATION_90
 //#define POINTING_DEVICE_AUTO_MOUSE_ENABLE
 
-
 #define CIRQUE_PINNACLE_ATTENUATION EXTREG__TRACK_ADCCONFIG__ADC_ATTENUATE_3X
+#define CIRQUE_PINNACLE_POSITION_MODE CIRQUE_PINNACLE_ABSOLUTE_MODE
+
+#define POINTING_DEVICE_AUTO_MOUSE_ENABLE
+#define AUTO_MOUSE_TIME	250
+#define AUTO_MOUSE_DELAY 200 //	(Optional) Lockout time after non-mouse key is pressed	ideally (100-1000)	ms	TAPPING_TERM or 200 ms
+#define AUTO_MOUSE_DEBOUNCE	25 // (Optional) Time delay from last activation to next update	ideally (10 - 100)	ms	25 ms
+#define AUTO_MOUSE_THRESHOLD 20 //	(Optional) Amount of mouse movement required to switch layers	0 -	units	10 units

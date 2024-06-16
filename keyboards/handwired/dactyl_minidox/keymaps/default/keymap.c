@@ -646,9 +646,13 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 float scroll_accumulated_h = 0;
 float scroll_accumulated_v = 0;
 
+void pointing_device_init_user(void) {
+    set_auto_mouse_layer(_MOUSE_AUTO); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
+    set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+}
+
 // Function to handle mouse reports and perform drag scrolling
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
-
     if (set_scrolling) {
 // Calculate and accumulate scroll values based on mouse movement and divisors
         scroll_accumulated_h += (float)mouse_report.x / SCROLL_DIVISOR_H;
@@ -697,18 +701,6 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
         mouse_report.x = 0;
         mouse_report.y = 0;
     } else {
-        if (mouse_report.x || mouse_report.y) {
-            if (trackpoint_timer) {
-                trackpoint_timer = timer_read();
-            } else {
-                if (!tp_buttons) { //I'm still a bit confused about this one, but I believe it checks that if the mousekey state isn't set, turn on this layer specified?
-                    layer_on(_MOUSE_AUTO);
-                    trackpoint_timer = timer_read();
-                }
-
-            }
-        }
-
         // If scrolling is not active, proceed normally.
         mouse_report.x *= 0.7;
         mouse_report.y *= 0.7;
