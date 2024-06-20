@@ -85,7 +85,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (keycode == DRAG_SCROLL && record->event.pressed) {
         set_scrolling = true;
     }
-        if (keycode == DRAG_SCROLL && !record->event.pressed) {
+    if (keycode == DRAG_SCROLL && !record->event.pressed) {
         set_scrolling = false;
     }
     bool useCMD = detected_host_os() == OS_MACOS;
@@ -510,10 +510,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                      KC_BTN4,    KC_BTN5,    KC_BTN2,    KC_BTN1,                    KC_BTN1,    KC_BTN2,    KC_WH_D,  KC_WH_U
     ),
     [_MOUSE_AUTO]      = LAYOUT( // have to duplicate to avoid the manual activation of layer from timing outt
-        _______,     _______,    _______,    _______,    _______,                    _______, _______,    _______,  _______,    _______,
-        _______,     _______,    _______,    DRAG_SCROLL,    _______,                DRAG_SCROLL, _______,    _______,  _______,    _______,
-        _______,     _______,    _______,    _______,    KC_BTN3,                    _______, _______,    RTT_MSE,  _______,    _______,
-                    KC_BTN4,     KC_BTN5,    KC_BTN2,    KC_BTN1,                    KC_BTN1, KC_BTN2,    KC_WH_D,  KC_WH_U
+        _______,     _______,    _______,    _______,    KC_BTN3,                    _______, _______,    _______,  _______,    _______,
+        _______,     _______,    _______,    _______,    KC_BTN2,                    _______, _______,    _______,  _______,    _______,
+        _______,     _______,    _______,    _______,    KC_BTN1,                    _______, _______,    _______,  _______,    _______,
+                    KC_BTN4,     KC_BTN5,    _______,    _______,                    _______, _______,    _______,  _______
     ),
     [_ARROW]      = LAYOUT(
        KC_NO,        KC_NO,    KC_UP,      KC_NO,   KC_NO,                               KC_PEQL,         KC_7,          KC_8,         KC_9,  KC_DLR,
@@ -635,6 +635,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     } else {
         set_arrows = true;
     }
+    if (!(IS_LAYER_ON(_MOUSE) || IS_LAYER_ON(_MOUSE_AUTO))) {
+        set_scrolling = false;
+    }
     return state;
 }
 
@@ -702,8 +705,8 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
         mouse_report.y = 0;
     } else {
         // If scrolling is not active, proceed normally.
-        mouse_report.x *= 0.7;
-        mouse_report.y *= 0.7;
+        //mouse_report.x *= 0.7;
+        //mouse_report.y *= 0.7;
 
         // check if _MOUSE
         if (IS_LAYER_ON(_MOUSE)) {

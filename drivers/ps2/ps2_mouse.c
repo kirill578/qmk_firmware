@@ -275,7 +275,8 @@ static inline void ps2_mouse_scroll_button_task(report_mouse_t *mouse_report) {
     static uint16_t scroll_button_time = 0;
     static int16_t  scroll_x, scroll_y;
 
-    if (PS2_MOUSE_SCROLL_BTN_MASK == (mouse_report->buttons & (PS2_MOUSE_SCROLL_BTN_MASK))) {
+    //if (PS2_MOUSE_SCROLL_BTN_MASK == (mouse_report->buttons & (PS2_MOUSE_SCROLL_BTN_MASK))) {
+    if (1) {
         // All scroll buttons are pressed
 
         if (scroll_state == SCROLL_NONE) {

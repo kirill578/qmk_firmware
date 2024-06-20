@@ -93,7 +93,12 @@
 #define PS2_MOUSE_Y_MULTIPLIER 1
 #define PS2_MOUSE_V_MULTIPLIER 10
 
-#define PS2_MOUSE_SCROLL_BTN_MASK 0 // disable scroll on middle button
+#define PS2_MOUSE_SCROLL_DIVISOR_H 32
+#define PS2_MOUSE_SCROLL_DIVISOR_V -4
+#define PS2_MOUSE_SCROLL_BTN_SEND 25 /* Default */
+
+// #define PS2_MOUSE_SCROLL_DIVISOR_V -25
+// #define PS2_MOUSE_SCROLL_DIVISOR_H 64
 
 
 #define LAYER_STATE_8BIT
@@ -107,7 +112,10 @@
 #define CIRQUE_PINNACLE_POSITION_MODE CIRQUE_PINNACLE_ABSOLUTE_MODE
 
 #define POINTING_DEVICE_AUTO_MOUSE_ENABLE
-#define AUTO_MOUSE_TIME	250
+#define AUTO_MOUSE_TIME	600
 #define AUTO_MOUSE_DELAY 200 //	(Optional) Lockout time after non-mouse key is pressed	ideally (100-1000)	ms	TAPPING_TERM or 200 ms
 #define AUTO_MOUSE_DEBOUNCE	25 // (Optional) Time delay from last activation to next update	ideally (10 - 100)	ms	25 ms
 #define AUTO_MOUSE_THRESHOLD 20 //	(Optional) Amount of mouse movement required to switch layers	0 -	units	10 units
+
+// #define PS2_MOUSE_ENABLE_SCROLLING
+#define PS2_MOUSE_SCROLL_MASK 0x0
