@@ -97,7 +97,32 @@ bool set_scrolling = false;
 
 // search str
 uint8_t mod_state;
+static uint16_t st_combo_timer = 0;
+static bool st_combo_triggered = false;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (st_combo_triggered && record->event.pressed) {
+        if (timer_elapsed(st_combo_timer) < 300) {
+            switch (keycode) {
+                case KC_LSFT:
+                case KC_RSFT:
+                case KC_LCTL:
+                case KC_RCTL:
+                case KC_LALT:
+                case KC_RALT:
+                case KC_LGUI:
+                case KC_RGUI:
+                    return true;
+            }
+            tap_code(KC_BSPC);
+            tap_code(KC_S);
+            tap_code(KC_T);
+            st_combo_triggered = false;
+            return true;
+        } else {
+            st_combo_triggered = false;
+        }
+    }
     if (keycode == DRAG_SCROLL && record->event.pressed) {
         set_scrolling = true;
     }
@@ -474,7 +499,7 @@ const uint16_t PROGMEM reset_stab[] = {HOME_R, HOME_S, HOME_T, COMBO_END};
 
 combo_t key_combos[] = {
     [TN_CW_TOGGLE] = COMBO(tn_cw_toggle, CW_TOGG),
-    [ST_OP] = COMBO(st_op, S(KC_9)),
+    [ST_OP] = COMBO_ACTION(st_op),
     [NE_CP] = COMBO(ne_cp, S(KC_0)),
     [NI_DEL] = COMBO(ni_del, KC_DEL),
     [_46_DEL] = COMBO(_46_del, KC_DEL),
@@ -525,23 +550,30 @@ bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode
 }
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
-  bool useCMD = detected_host_os() == OS_MACOS;
-  mod_state = get_mods();
-  switch(combo_index) {
-    case YOU_COMBO:
-      if (pressed) {
-        if (mod_state & MOD_MASK_SHIFT) {
-          SEND_STRING("You");
-        } else {
-          SEND_STRING("you");
-        }
-      }
-      break;
-     case WORD_BSPC:
-        if (pressed) {
-            tap_code16(useCMD ? A(KC_BSPC) : C(KC_BSPC));
-        }
-  }
+    bool useCMD = detected_host_os() == OS_MACOS;
+    mod_state = get_mods();
+    switch(combo_index) {
+        case ST_OP:
+            if (pressed) {
+                tap_code16(S(KC_9));
+                st_combo_timer = timer_read();
+                st_combo_triggered = true;
+            }
+            break;
+        case YOU_COMBO:
+            if (pressed) {
+                if (mod_state & MOD_MASK_SHIFT) {
+                    SEND_STRING("You");
+                } else {
+                    SEND_STRING("you");
+                }
+            }
+            break;
+        case WORD_BSPC:
+            if (pressed) {
+                tap_code16(useCMD ? A(KC_BSPC) : C(KC_BSPC));
+            }
+    }
 }
 
 
