@@ -13,6 +13,7 @@ enum layer_names {
     _ARROW,
     _GAME,
     _GAME2,
+    _PINKY,
 };
 
 #ifdef AUDIO_ENABLE
@@ -56,11 +57,11 @@ float mehOffSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1),);
 #define SLS_PIP LT(0, KC_SLSH)
 
 
-#define HOME_Z LT(0,KC_Z)
-#define HOME_X LT(0,KC_X)
-#define HOME_C LT(0,KC_C)
-#define HOME_D LT(_MOUSE,KC_D)
-#define HOME_V LT(0,KC_V)
+#define HOME_Z LT(_PINKY,KC_Z)
+#define HOME_X KC_X
+#define HOME_C KC_C
+#define HOME_D KC_D
+#define HOME_V KC_V
 
 #define HOME_SPACE LT(_ARROW,KC_SPC)
 
@@ -73,7 +74,13 @@ enum custom_keycodes {
     PRINT_CP,
     PRINT_VID,
     LT_SYM_OSM_MEH,
-    DRAG_SCROLL
+    DRAG_SCROLL,
+    PINKY_UNDO,
+    PINKY_REDO,
+    PINKY_CUT,
+    PINKY_COPY,
+    PINKY_PASTE,
+    PINKY_SEARCH
 };
 
 bool set_arrows = false;
@@ -251,42 +258,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             x++;
             break;
         }
-        case LT(0,KC_X):
-            if (!record->tap.count && record->event.pressed) {
-                #ifdef AUDIO_ENABLE
-                    PLAY_SONG(cutSound);
-                #endif //AUDIO_ENABLE
-                tap_code16(useCMD ? G(KC_X) : C(KC_X));
-                return false;
-            }
-            return true;
-        case LT(0,KC_C):
-            if (!record->tap.count && record->event.pressed) {
-                #ifdef AUDIO_ENABLE
-                    PLAY_SONG(copySound);
-                #endif //AUDIO_ENABLE
-                tap_code16(useCMD ? G(KC_C) : C(KC_C));
-                return false;
-            }
-            return true;
-        case LT(0,KC_V):
-            if (!record->tap.count && record->event.pressed) {
-                #ifdef AUDIO_ENABLE
-                    PLAY_SONG(pasteSound);
-                #endif //AUDIO_ENABLE
-                tap_code16(useCMD ? G(KC_V) : C(KC_V));
-                return false;
-            }
-            return true;
-        case LT(0,KC_Z):
-            if (!record->tap.count && record->event.pressed) {
-                #ifdef AUDIO_ENABLE
-                    PLAY_SONG(undoSound);
-                #endif //AUDIO_ENABLE
-                tap_code16(useCMD ? G(KC_Z) : C(KC_Z));
-                return false;
-            }
-            return true;
         case LT(0,KC_QUOT):
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(KC_GRV);
@@ -306,6 +277,57 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             if (record->tap.count && record->event.pressed) {
                 SEND_STRING("&");
+                return false;
+            }
+            return true;
+        case PINKY_UNDO:
+            if (record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(undoSound);
+                #endif //AUDIO_ENABLE
+                tap_code16(useCMD ? G(KC_Z) : C(KC_Z));
+                return false;
+            }
+            return true;
+        case PINKY_CUT:
+            if (record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(cutSound);
+                #endif //AUDIO_ENABLE
+                tap_code16(useCMD ? G(KC_X) : C(KC_X));
+                return false;
+            }
+            return true;
+        case PINKY_COPY:
+            if (record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(copySound);
+                #endif //AUDIO_ENABLE
+                tap_code16(useCMD ? G(KC_C) : C(KC_C));
+                return false;
+            }
+            return true;
+        case PINKY_PASTE:
+            if (record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(pasteSound);
+                #endif //AUDIO_ENABLE
+                tap_code16(useCMD ? G(KC_V) : C(KC_V));
+                return false;
+            }
+            return true;
+        case PINKY_REDO:
+            if (record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(undoSound);
+                #endif //AUDIO_ENABLE
+                tap_code16(useCMD ? G(S(KC_Z)) : C(KC_Y));
+                return false;
+            }
+            return true;
+        case PINKY_SEARCH:
+            if (record->event.pressed) {
+                tap_code16(useCMD ? G(KC_F) : C(KC_F));
                 return false;
             }
             return true;
@@ -532,6 +554,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_LSFT,        KC_1,       KC_2,            KC_3,               KC_4,                               KC_5,    KC_6,       KC_7,       KC_8,    KC_9,
        KC_LCTL,     KC_TILD,       KC_T,            KC_G,               KC_B,                            _______, _______,    _______,    _______,    _______,
                     KC_LEFT,   KC_RIGHT,         _______,            _______,                            _______, _______,    _______,    DF(_BASE)
+    ),
+    [_PINKY] = LAYOUT(
+        _______, _______, PINKY_SEARCH, _______, PINKY_REDO,                            _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______,
+        KC_TRNS, PINKY_UNDO, PINKY_CUT, PINKY_COPY, PINKY_PASTE,               _______, _______, _______, _______, _______,
+                 _______, _______, _______, _______,                            _______, _______, _______, _______
     ),
 };
 
