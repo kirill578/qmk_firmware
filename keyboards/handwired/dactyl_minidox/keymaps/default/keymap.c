@@ -399,6 +399,61 @@ void matrix_scan_user(void) {  // ALWAYS RUNNING VOID FUNCTION, CAN BE USED TO C
     }
   }
 }
+
+void ps2_mouse_init_user() {
+    // Add delay to ensure stable initialization
+    wait_ms(100);
+
+    uint8_t rcv;
+    bool success = true;
+
+    // Attempt initialization multiple times if needed
+    for (int attempt = 0; attempt < 3; attempt++) {
+        success = true;
+
+        // set TrackPoint sensitivity
+        if (!PS2_MOUSE_SEND(0xE2, "tpsens: 0xE2")) success = false;
+        if (!PS2_MOUSE_SEND(0x81, "tpsens: 0x81")) success = false;
+        if (!PS2_MOUSE_SEND(0x4A, "tpsens: 0x4A")) success = false;
+        if (!PS2_MOUSE_SEND(0x49, "tpsens: 0xFF")) success = false;
+
+        // If successful, continue with rest of initialization
+        if (success) {
+            // set TrackPoint Negative Inertia factor
+            PS2_MOUSE_SEND(0xE2, "tpnegin: 0xE2");
+            PS2_MOUSE_SEND(0x81, "tpnegin: 0x81");
+            PS2_MOUSE_SEND(0x4D, "tpnegin: 0x4D");
+            PS2_MOUSE_SEND(0x06, "tpnegin: 0x06");
+
+            // set TrackPoint speed
+            PS2_MOUSE_SEND(0xE2, "tpsp: 0xE2");
+            PS2_MOUSE_SEND(0x81, "tpsp: 0x81");
+            PS2_MOUSE_SEND(0x60, "tpsp: 0x60");
+            PS2_MOUSE_SEND(0x61, "tpsp: 0xFF");
+
+            // Reset accumulated scroll values
+            scroll_accumulated_h = 0;
+            scroll_accumulated_v = 0;
+
+            break;
+        }
+
+        // If failed, wait before retry
+        wait_ms(100);
+    }
+
+    // inquire pts status
+    rcv = ps2_host_send(0xE2);
+    rcv = ps2_host_send(0x2C);
+    rcv = ps2_host_recv_response();
+    if ((rcv & 1) == 1) {
+        // if on, disable pts
+        rcv = ps2_host_send(0xE2);
+        rcv = ps2_host_send(0x47);
+        rcv = ps2_host_send(0x2C);
+        rcv = ps2_host_send(0x01);
+    }
+}
 #endif
 
 enum combos {
@@ -625,46 +680,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
-#ifdef PS2_MOUSE_ENABLE
-void ps2_mouse_init_user() {
-    uint8_t rcv;
-
-    // see p24 https://blogs.epfl.ch/icenet/documents/Ykt3Eext.pdf
-
-    // set TrackPoint sensitivity
-    PS2_MOUSE_SEND(0xE2, "tpsens: 0xE2");
-    PS2_MOUSE_SEND(0x81, "tpsens: 0x81");
-    PS2_MOUSE_SEND(0x4A, "tpsens: 0x4A");
-    PS2_MOUSE_SEND(0x49, "tpsens: 0xFF");
-
-    // set TrackPoint Negative Inertia factor
-    PS2_MOUSE_SEND(0xE2, "tpnegin: 0xE2");
-    PS2_MOUSE_SEND(0x81, "tpnegin: 0x81");
-    PS2_MOUSE_SEND(0x4D, "tpnegin: 0x4D");
-    PS2_MOUSE_SEND(0x06, "tpnegin: 0x06");
-
-    // set TrackPoint speed
-    // (transfer function upper plateau speed)
-    PS2_MOUSE_SEND(0xE2, "tpsp: 0xE2");
-    PS2_MOUSE_SEND(0x81, "tpsp: 0x81");
-    PS2_MOUSE_SEND(0x60, "tpsp: 0x60");
-    PS2_MOUSE_SEND(0x61, "tpsp: 0xFF");
-
-    // inquire pts status
-    rcv = ps2_host_send(0xE2);
-    rcv = ps2_host_send(0x2C);
-    rcv = ps2_host_recv_response();
-    if ((rcv & 1) == 1) {
-    // if on, disable pts
-    rcv = ps2_host_send(0xE2);
-    rcv = ps2_host_send(0x47);
-    rcv = ps2_host_send(0x2C);
-    rcv = ps2_host_send(0x01);
-    }
-
-}
-#endif
-
 // ┌─────────────────────────────────────────────────┐
 // │ d e f i n e   k e y   o v e r r i d e s         │
 // └─────────────────────────────────────────────────┘
@@ -801,6 +816,24 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
         }
     }
     return mouse_report;
+}
+
+void suspend_power_down_user(void) {
+    // Clear any persistent states that might cause issues
+    clear_keyboard();
+    #ifdef PS2_MOUSE_ENABLE
+        // Reset trackpoint state
+        ps2_mouse_reset_state();
+    #endif
+}
+
+void suspend_wakeup_init_user(void) {
+    // Re-initialize key states
+    clear_keyboard();
+    #ifdef PS2_MOUSE_ENABLE
+        // Re-initialize trackpoint
+        ps2_mouse_init_user();
+    #endif
 }
 
 
