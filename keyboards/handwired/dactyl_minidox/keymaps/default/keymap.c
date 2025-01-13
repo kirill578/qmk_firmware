@@ -178,14 +178,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         case LT(_MOUSE,KC_D):
             if (record->event.pressed) {
-                ps2_set_multiplier(6);
+                #ifdef PS2_MOUSE_ENABLE
+                    ps2_set_multiplier(6);
+                #endif
             } else {
-                ps2_set_multiplier(2);
+                #ifdef PS2_MOUSE_ENABLE
+                    ps2_set_multiplier(2);
+                #endif
             }
             return true;
         case KC_ACL0:
             if (record->event.pressed) {
-                ps2_set_multiplier(1);  // todo make it more reliable
+                #ifdef PS2_MOUSE_ENABLE
+                    ps2_set_multiplier(1);  // todo make it more reliable
+                #endif
             }
             return true;
         case KC_LEFT:
@@ -355,6 +361,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
+#ifdef PS2_MOUSE_ENABLE
 static uint16_t trackpoint_timer;
 extern int tp_buttons;
 
@@ -377,6 +384,7 @@ void matrix_scan_user(void) {  // ALWAYS RUNNING VOID FUNCTION, CAN BE USED TO C
     }
   }
 }
+#endif
 
 enum combos {
     TN_CW_TOGGLE,
@@ -689,13 +697,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-// Modify these values to adjust the scrolling speed
 #define SCROLL_DIVISOR_H 64.0
 #define SCROLL_DIVISOR_V 32.0
-
-// Variables to store accumulated scroll values
 float scroll_accumulated_h = 0;
 float scroll_accumulated_v = 0;
+
 
 void pointing_device_init_user(void) {
     set_auto_mouse_layer(_MOUSE_AUTO); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>

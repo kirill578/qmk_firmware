@@ -1,6 +1,6 @@
-PS2_MOUSE_ENABLE = yes
-PS2_ENABLE = yes
-PS2_DRIVER = usart
+#PS2_MOUSE_ENABLE = no
+#PS2_ENABLE = no
+#PS2_DRIVER = usart
 
 AUDIO_ENABLE = no
 MUSIC_ENABLE = no

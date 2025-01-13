@@ -60,7 +60,8 @@
 
 /* synchronous, odd parity, 1-bit stop, 8-bit data, sample at falling edge */
 /* set DDR of CLOCK as input to be slave */
-#define PS2_USART_INIT() do {   \
+/*
+#define PS2_MOUSE_ENABLE() do {   \
     PS2_CLOCK_DDR &= ~(1<<PS2_CLOCK_BIT);   \
     PS2_DATA_DDR &= ~(1<<PS2_DATA_BIT);     \
     UCSR1C = ((1 << UMSEL10) |  \
@@ -95,11 +96,11 @@
 
 #define PS2_MOUSE_SCROLL_DIVISOR_H 32
 #define PS2_MOUSE_SCROLL_DIVISOR_V -4
-#define PS2_MOUSE_SCROLL_BTN_SEND 25 /* Default */
+#define PS2_MOUSE_SCROLL_BTN_SEND 25
 
 // #define PS2_MOUSE_SCROLL_DIVISOR_V -25
 // #define PS2_MOUSE_SCROLL_DIVISOR_H 64
-
+*/
 
 #define LAYER_STATE_8BIT
 #define CIRQUE_PINNACLE_DIAMETER_MM 35
