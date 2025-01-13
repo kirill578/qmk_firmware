@@ -1,3 +1,8 @@
+#include <stdint.h>
+#include <stdbool.h>
+#include "quantum.h"
+#include "pointing_device.h"
+
 #include QMK_KEYBOARD_H
 
 #ifdef PS2_MOUSE_ENABLE
@@ -38,7 +43,7 @@ float mehOffSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1),);
 #define      O_MEH    OSM(MOD_MEH)
 
 // Left-hand home row mods
-#define HOME_A LCTL_T(KC_A)
+#define HOME_A LT(_PINKY, LCTL_T(KC_A))
 #define HOME_R LALT_T(KC_R)
 #define HOME_S LGUI_T(KC_S)
 #define HOME_T LSFT_T(KC_T)
