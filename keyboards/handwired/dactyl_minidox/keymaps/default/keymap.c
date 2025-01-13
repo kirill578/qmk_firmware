@@ -1,8 +1,3 @@
-#include <stdint.h>
-#include <stdbool.h>
-#include "quantum.h"
-#include "pointing_device.h"
-
 #include QMK_KEYBOARD_H
 
 #ifdef PS2_MOUSE_ENABLE
