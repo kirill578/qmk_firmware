@@ -38,7 +38,7 @@ float mehOffSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1),);
 #define      O_MEH    OSM(MOD_MEH)
 
 // Left-hand home row mods
-#define HOME_A LT(_PINKY, LCTL_T(KC_A))
+#define HOME_A LCTL_T(KC_A)
 #define HOME_R LALT_T(KC_R)
 #define HOME_S LGUI_T(KC_S)
 #define HOME_T LSFT_T(KC_T)
@@ -79,7 +79,6 @@ enum custom_keycodes {
     DRAG_SCROLL,
     PINKY_UNDO,
     PINKY_REDO,
-    PINKY_CUT,
     PINKY_COPY,
     PINKY_PASTE,
     PINKY_SEARCH,
@@ -324,15 +323,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
-        case PINKY_CUT:
-            if (record->event.pressed) {
-                #ifdef AUDIO_ENABLE
-                    PLAY_SONG(cutSound);
-                #endif //AUDIO_ENABLE
-                tap_code16(useCMD ? G(KC_X) : C(KC_X));
-                return false;
-            }
-            return true;
         case PINKY_COPY:
             if (record->event.pressed) {
                 #ifdef AUDIO_ENABLE
@@ -450,6 +440,7 @@ enum combos {
 
     RT_TAB,
     RST_STAB,
+    XC_CUT,
 };
 
 const uint16_t PROGMEM tn_cw_toggle[] = {HOME_T, HOME_N, COMBO_END};
@@ -491,6 +482,7 @@ const uint16_t PROGMEM word_bspc[] = {HOME_SPACE, KC_BSPC, COMBO_END};
 const uint16_t PROGMEM reset_tab[] = {HOME_R, HOME_T, COMBO_END};
 const uint16_t PROGMEM reset_stab[] = {HOME_R, HOME_S, HOME_T, COMBO_END};
 
+const uint16_t PROGMEM xc_cut[] = {HOME_X, HOME_C, COMBO_END};
 
 combo_t key_combos[] = {
     [TN_CW_TOGGLE] = COMBO(tn_cw_toggle, CW_TOGG),
@@ -531,6 +523,7 @@ combo_t key_combos[] = {
 
     [RT_TAB] = COMBO(reset_tab, KC_TAB),
     [RST_STAB] = COMBO(reset_stab, S(KC_TAB)),
+    [XC_CUT] = COMBO_ACTION(xc_cut),
 };
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
@@ -568,6 +561,15 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
             if (pressed) {
                 tap_code16(useCMD ? A(KC_BSPC) : C(KC_BSPC));
             }
+            break;
+        case XC_CUT:
+            if (pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(cutSound);
+                #endif //AUDIO_ENABLE
+                tap_code16(useCMD ? G(KC_X) : C(KC_X));
+            }
+            break;
     }
 }
 
@@ -618,7 +620,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_PINKY] = LAYOUT(
         _______, _______, PINKY_SEARCH, _______, PINKY_REDO,                    QK_BOOT, _______, _______, _______, DF(_GAME),
         _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______,
-        KC_TRNS, PINKY_UNDO, PINKY_CUT, PINKY_COPY, PINKY_PASTE,               _______, _______, _______, _______, _______,
+        KC_TRNS, PINKY_UNDO, PINKY_COPY, PINKY_PASTE, _______,                  _______, _______, _______, _______, _______,
                  _______, _______, _______, _______,                            _______, _______, _______, _______
     ),
 };
