@@ -713,9 +713,7 @@ const key_override_t **key_overrides = (const key_override_t *[]){
   &lt_override,
   &colon_override,
   &gt_override,
-  NULL // Null terminate the array of overrides!
 };
-
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     if (get_highest_layer(state) != _ARROW) {
