@@ -21,6 +21,8 @@ float cutSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_C3), Q__NOTE(_C1),);
 float copySound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_B3),);
 float pasteSound[][2] = SONG(Q__NOTE(_B3),);
 float undoSound[][2] = SONG(Q__NOTE(_A3), Q__NOTE(_A3),);
+float zoomInSound[][2] = SONG(Q__NOTE(_C4), Q__NOTE(_E4),);
+float zoomOutSound[][2] = SONG(Q__NOTE(_E4), Q__NOTE(_C4),);
 
 float leadSound[][2] = SONG(Q__NOTE(_C3), Q__NOTE(_C1), Q__NOTE(_C2), Q__NOTE(_C4),);
 float mehSound[][2] = SONG(Q__NOTE(_C3));
@@ -80,7 +82,9 @@ enum custom_keycodes {
     PINKY_CUT,
     PINKY_COPY,
     PINKY_PASTE,
-    PINKY_SEARCH
+    PINKY_SEARCH,
+    ZOOM_IN,
+    ZOOM_OUT,
 };
 
 bool set_arrows = false;
@@ -331,6 +335,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
+        case ZOOM_IN:
+            if (record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(zoomInSound);
+                #endif //AUDIO_ENABLE
+                tap_code16(useCMD ? G(KC_EQL) : C(KC_EQL));
+            }
+            return false;
+        case ZOOM_OUT:
+            if (record->event.pressed) {
+                #ifdef AUDIO_ENABLE
+                    PLAY_SONG(zoomOutSound);
+                #endif //AUDIO_ENABLE
+                tap_code16(useCMD ? G(KC_MINS) : C(KC_MINS));
+            }
+            return false;
     }
     return true;
 }
@@ -523,7 +543,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         PRINT_VID,   KC_F7,    KC_F8,   KC_F9,  KC_F10,                              _______,  KC_F16,     KC_F17,   KC_F18,    _______,
         PRINT,       KC_F4,    KC_F5,   KC_F6,  KC_F11,                              _______, _______,    _______,  _______,    _______,
         PRINT_CP,    KC_F1,    KC_F2,   KC_F3,  KC_F12,                               KC_F19,  C(KC_F16),    C(KC_F17),   C(KC_F18),    _______,
-                   KC_BTN4,  KC_BTN5,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS,    QK_BOOT, DF(_GAME)
+                   KC_BTN4,  KC_BTN5,  KC_TRNS, KC_TRNS,                              KC_TRNS, KC_TRNS,    ZOOM_OUT,  ZOOM_IN
     ),
     [_MOUSE]      = LAYOUT(
         _______,     _______,    _______,    _______,    _______,                    KC_WH_L,    KC_WH_D,    KC_MS_U,  KC_WH_U,   KC_WH_R,
@@ -556,7 +576,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                     KC_LEFT,   KC_RIGHT,         _______,            _______,                            _______, _______,    _______,    DF(_BASE)
     ),
     [_PINKY] = LAYOUT(
-        _______, _______, PINKY_SEARCH, _______, PINKY_REDO,                            _______, _______, _______, _______, _______,
+        _______, _______, PINKY_SEARCH, _______, PINKY_REDO,                    QK_BOOT, _______, _______, _______, DF(_GAME),
         _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______,
         KC_TRNS, PINKY_UNDO, PINKY_CUT, PINKY_COPY, PINKY_PASTE,               _______, _______, _______, _______, _______,
                  _______, _______, _______, _______,                            _______, _______, _______, _______
